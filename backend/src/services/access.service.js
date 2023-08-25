@@ -47,7 +47,6 @@ class AccessService{
             }
         }
     }
-
     static signIn = async ({email, password}) => {
         const user = await findUserByEmail(email);
         const match = await bcrypt.compare(password, user.password);
