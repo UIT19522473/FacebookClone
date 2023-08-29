@@ -1,18 +1,16 @@
-const {model, Schema} = require('mongoose');
+const { model, Schema } = require('mongoose');
 
 const DOCUMENT_NAME = 'User';
 const COLLECTION_NAME = 'Users';
 
 const userSchema = new Schema({
-    firstName: {
-        type: String,
-        trim: true,
-        maxLength: 255
-    },
-    lastName: {
+    name: {
         type: String,
         trim: true,
         maxLength: 255,
+    },
+    img: {
+        type: String,
     },
     email: {
         type: String,

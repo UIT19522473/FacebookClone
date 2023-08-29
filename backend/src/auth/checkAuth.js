@@ -1,6 +1,3 @@
-const HEADER = {
-    AUTHORIZATION: 'authorization'
-}
 
 const asyncHandler = fn => {
     return (req, res, next) => {
