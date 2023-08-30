@@ -4,9 +4,20 @@ import { AiFillQuestionCircle } from "react-icons/ai";
 
 import { Select } from "antd";
 import { dataDay, dataMonth, dataYear } from "../helps/dataBirthDay";
+import { apiSignUp } from "../apis/apiAuth";
 
 const Register = (props) => {
   const { open, setOpen } = props;
+
+  //handle when sign up
+  const handleSignUp = async () => {
+    const response = await apiSignUp({
+      name: "test",
+      email: "test2@gmail.com",
+      password: "123",
+    });
+    console.log(response);
+  };
   return (
     <div className="wrap-form-register">
       <div className="form-register-header flex justify-between">
@@ -108,7 +119,10 @@ const Register = (props) => {
         </p>
 
         <div className="wrap-btn-register flex items-center justify-center my-4">
-          <button className="bg-green-600 text-white py-1 px-12 font-bold rounded-lg hover:bg-green-800 transition-all ease-out">
+          <button
+            onClick={handleSignUp}
+            className="bg-green-600 text-white py-1 px-12 font-bold rounded-lg hover:bg-green-800 transition-all ease-out"
+          >
             Đăng ký
           </button>
         </div>

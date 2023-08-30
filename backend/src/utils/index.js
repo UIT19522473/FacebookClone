@@ -9,14 +9,10 @@ const getInfoData = ({ fields = [], object = {} }) => {
 
 // Create S3 service object
 AWS.config.update({
-  //   accessKeyId: "AKIAVWSJAMTGV5RIVCY2",
-  //   secretAccessKey: "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",
   accessKeyId: process.env.ACCESSKEYID,
   secretAccessKey: process.env.SECRETACCESSKEY,
 });
 
-// AKIAVWSJAMTGV5RIVCY2
-// QyGN2WQQgxhPmnGkoF/Xu9yv+UrjOGkuEucxmUlP
 const s3 = new AWS.S3();
 
 const upload = multer({
