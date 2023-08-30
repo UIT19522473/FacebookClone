@@ -15,7 +15,7 @@ const CreateStoryCard = () => {
       </div>
       <div className="wrap-btn-create-story">
         <button className="btn-create-story">
-          <span class="material-symbols-outlined create-story-icon-add text-center">
+          <span className="material-symbols-outlined create-story-icon-add text-center">
             add
           </span>
           <p className="text-sm">Tạo tin</p>

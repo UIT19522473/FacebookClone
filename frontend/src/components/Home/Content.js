@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "../../styles/home/content.css";
 import { BiSolidVideoPlus } from "react-icons/bi";
 import { FaImages } from "react-icons/fa";
@@ -10,10 +10,24 @@ import Slider from "react-slick";
 import { settingStory } from "../../helps/settingSlider";
 import CreateStoryCard from "./CreateStoryCard";
 import StoryCard from "./StoryCard";
+import Modal from "../Modal";
+// import Register from "../Register";
+import CreatePost from "./CreatePost";
 
 const Content = () => {
+  const [open, setOpen] = useState(false);
+  const handleOpenCreatePost = () => {
+    setOpen(true);
+  };
   return (
-    <content className="home-content">
+    <div className="home-content mt-3">
+      {open ? (
+        <Modal open={open} setOpen={setOpen}>
+          <CreatePost open={open} setOpen={setOpen} />
+        </Modal>
+      ) : (
+        <></>
+      )}
       <section className="home-stories">
         <div>
           {/* <h2> Single Item</h2> */}
@@ -31,11 +45,14 @@ const Content = () => {
           <div className="mypost-title-avatar">
             <img className="w-14 h-14" src={ImgFacebook} alt="logo" />
           </div>
-          <div className="mypost-title-text w-full">
-            <button className="w-full bg-transparent text-start mypost-btn-thinking">
+          <button
+            onClick={handleOpenCreatePost}
+            className="mypost-title-text w-full"
+          >
+            <p className="w-full  bg-transparent text-start mypost-btn-thinking">
               Tuan oi, ban dang nghi gi the?
-            </button>
-          </div>
+            </p>
+          </button>
         </div>
         <div className="home-mypost-wrap-option flex items-center justify-between mt-2 px-3">
           <button className="mypost-option mypost-option-stream flex items-center gap-1">
@@ -56,7 +73,7 @@ const Content = () => {
         <PostCard />
         <PostCard />
       </section>
-    </content>
+    </div>
   );
 };
 

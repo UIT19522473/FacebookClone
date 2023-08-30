@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import "../styles/login.css";
 import LogoFacebook from "../images/fb_logo.svg";
-import ModalRegister from "../components/ModalRegister";
+
+import Modal from "../components/Modal";
+import Register from "../components/Register";
 
 const Login = () => {
   const [open, setOpen] = useState(false);
@@ -12,7 +14,13 @@ const Login = () => {
   };
   return (
     <div className="wrap-login">
-      {open ? <ModalRegister open={open} setOpen={setOpen} /> : <></>}
+      {open ? (
+        <Modal open={open} setOpen={setOpen}>
+          <Register open={open} setOpen={setOpen} />
+        </Modal>
+      ) : (
+        <></>
+      )}
       <main className="main-login">
         <div className="row">
           <div className="col-logo">

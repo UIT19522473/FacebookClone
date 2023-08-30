@@ -13,7 +13,7 @@ const NavBarRightHome = () => {
           <span className="material-symbols-outlined ml-auto mr-3 cursor-pointer">
             search
           </span>
-          <span class="material-symbols-outlined cursor-pointer">
+          <span className="material-symbols-outlined cursor-pointer">
             more_horiz
           </span>
         </span>

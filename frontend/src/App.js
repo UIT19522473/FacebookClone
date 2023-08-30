@@ -8,21 +8,22 @@ import Watch from "./pages/Watch";
 import Group from "./pages/Group";
 import Game from "./pages/Game";
 import Login from "./pages/Login";
-import ModalRegister from "./components/ModalRegister";
+
+import Test from "./pages/Test";
 
 const App = () => {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="login" element={<Login />} />
-        <Route path="test" element={<ModalRegister />} />
+        {/* <Route path="test" element={<ModalRegister />} /> */}
 
         <Route path="/" element={<LayOut />}>
           <Route index element={<Home />} />
           <Route path="watch" element={<Watch />} />
           <Route path="group" element={<Group />} />
           <Route path="game" element={<Game />} />
-
+          <Route path="test" element={<Test />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>

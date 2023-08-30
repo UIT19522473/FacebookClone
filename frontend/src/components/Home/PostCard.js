@@ -16,6 +16,28 @@ import { PiShareFat } from "react-icons/pi";
 import CommentUser from "./CommentUser";
 
 const PostCard = () => {
+  const comments = [
+    {
+      author: "User 1",
+      content: "This is the main comment.",
+      replies: [
+        {
+          author: "User 2",
+          content: "This is a nested reply.",
+          replies: [
+            { author: "User 2", content: "This is a nested reply." },
+            { author: "User 3", content: "Another nested reply." },
+          ],
+        },
+        { author: "User 3", content: "Another nested reply." },
+      ],
+    },
+    {
+      author: "User 4",
+      content: "Another main comment.",
+      replies: [],
+    },
+  ];
   return (
     <div className="post-card mt-4">
       <div className="post-card-header flex ">
@@ -84,9 +106,15 @@ const PostCard = () => {
             Xem them binh luan
           </button>
           <ul className="post-card-footer-comment mt-2 gap-3 flex flex-col">
-            <CommentUser />
-            <CommentUser />
-            <CommentUser />
+            {comments.map((comment, index) => (
+              <li key={index}>
+                <CommentUser
+                  author={comment.author}
+                  content={comment.content}
+                  replies={comment.replies}
+                />
+              </li>
+            ))}
           </ul>
           <div className="wrap-write-comment mt-4 flex items-center gap-1">
             <img className="w-10 h-10" src={IconFacebook} alt="logo" />

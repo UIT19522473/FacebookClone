@@ -5,7 +5,7 @@ import Content from "../components/Home/Content";
 
 const Home = () => {
   return (
-    <body className="grid grid-cols-12 home-body">
+    <div className="grid grid-cols-12 home-body">
       <div className="col-span-3 ">
         <NavBarLeftHome />
       </div>
@@ -15,7 +15,7 @@ const Home = () => {
       <div className="col-span-3">
         <NavBarRightHome />
       </div>
-    </body>
+    </div>
   );
 };
 

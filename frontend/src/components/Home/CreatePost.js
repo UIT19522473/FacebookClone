@@ -1,0 +1,142 @@
+// import TextArea from "antd/es/input/TextArea";
+
+import "../../styles/home/createpost.css";
+import React, { useRef, useState } from "react";
+import { BsFileEarmarkImage } from "react-icons/bs";
+import IconFacebook from "../../images/facebook.svg";
+
+//selected
+const Dropdown = () => {
+  const options = ["Công khai", "Riêng tư", "Chỉ bạn bè", "Ngoại trừ"];
+
+  const [selectedOption, setSelectedOption] = useState("");
+
+  const handleSelectChange = (event) => {
+    setSelectedOption(event.target.value);
+  };
+
+  return (
+    <div>
+      {/* <label htmlFor="dropdown">Select an option:</label> */}
+      <select
+        className="create-post-select"
+        id="dropdown"
+        value={selectedOption}
+        onChange={handleSelectChange}
+      >
+        {/* <option value={options[0]}>Công khai</option> */}
+        {options.map((option, index) => (
+          <option key={index} value={option}>
+            {option}
+          </option>
+        ))}
+      </select>
+      {/* {selectedOption && <p>Selected option: {selectedOption}</p>} */}
+    </div>
+  );
+};
+
+const CreatePost = (props) => {
+  const { open, setOpen } = props;
+
+  //state post
+  const userId = "1";
+  const [desc, setDesc] = useState("");
+  const [type, setType] = useState("public");
+  const [imageURL, setImageURL] = useState("");
+
+  //file
+  const fileInputRef = useRef(null);
+
+  const handleButtonClick = () => {
+    // Khi nút được nhấp, kích hoạt sự kiện click cho input file
+    fileInputRef.current.click();
+  };
+
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const imageURL = URL.createObjectURL(file);
+      setImageURL(imageURL);
+    }
+  };
+
+  //submit post
+  const handleSubmitPost = () => {
+    console.log({
+      userId,
+      desc,
+      type,
+      imageURL,
+    });
+  };
+
+  return (
+    <div className="wrap-create-post p-4">
+      <div className="create-post-header">
+        <div className="wrap-create-post-title flex items-center ">
+          <h2 className="flex-1 text-center text-xl">Tạo bài viết</h2>
+          <button
+            onClick={() => setOpen(!open)}
+            className="ml-auto mr-2 create-post-btnclose"
+          >
+            <span className="material-symbols-outlined">close</span>
+          </button>
+        </div>
+        <div className="wrap-create-post-user flex items-center gap-2">
+          <div className="create-post-user-img rounded-full w-12 h-12">
+            <img className="w-full h-full" src={IconFacebook} alt="logo" />
+          </div>
+          <div className="create-post-user-info">
+            <p className="text-base">Tuan Nguyen</p>
+
+            <Dropdown />
+          </div>
+        </div>
+      </div>
+
+      <div className="create-post-body mt-3">
+        <div className="create-post-text">
+          <textarea
+            onChange={(e) => setDesc(e.target.value)}
+            value={desc}
+            className="create-post-textarea "
+            placeholder="Tuân ơi, bạn đang nghĩ gì thế"
+          />
+        </div>
+        <div className="create-post-img">
+          {imageURL !== "" ? (
+            <img className="custom-image" src={imageURL} alt="logo" />
+          ) : (
+            <></>
+          )}
+        </div>
+        <div className="create-post-add flex items-center justify-between mt-3">
+          <p>Thêm ảnh vào bài viết của bạn</p>
+          <div>
+            <button
+              className="upload-button text-green-700"
+              onClick={handleButtonClick}
+            >
+              <BsFileEarmarkImage size={24} />
+            </button>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              style={{ display: "none" }} // Ẩn input file
+            />
+          </div>
+        </div>
+      </div>
+      <div className="create-post-footer mt-3">
+        <button onClick={handleSubmitPost} className="create-post-btnpost">
+          Đăng
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default CreatePost;
