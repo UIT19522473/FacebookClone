@@ -7,7 +7,7 @@ const { BadRequestError, AuthFailureError, NotFoundError, ConflictRequestError} 
 const jwt = require("jsonwebtoken");
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
 class AccessService {
-    static signUp = async ({ firstName, lastName, email, password }) => {
+    static signUp = async ({ name, email, password }) => {
         //check email
         const user = await findUserByEmail(email);
 
@@ -18,18 +18,17 @@ class AccessService {
         const passwordHash = await bcrypt.hash(password, 10);
 
         const newUser = await userModel.create({
-            firstName,
-            lastName,
+            name,
             email,
             password: passwordHash
         })
 
         if (newUser) {
-            const tokens = await createTokenPair({ _id: newUser._id, firstName, lastName, email }, PRIVATE_KEY);
+            const tokens = await createTokenPair({ _id: newUser._id, name, email }, PRIVATE_KEY);
             return {
                 code: 201,
                 metadata: {
-                    user: getInfoData({ fields: ['_id', 'firstName', 'lastName', 'email'], object: newUser }),
+                    user: getInfoData({ fields: ['_id', 'name', 'img', 'email'], object: newUser }),
                     tokens
                 }
             }
