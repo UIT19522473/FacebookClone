@@ -11,6 +11,7 @@ const userSchema = new Schema({
     },
     img: {
         type: String,
+        default: "https://phucnvh.s3.ap-southeast-1.amazonaws.com/no-avatar.jpeg",
     },
     email: {
         type: String,
