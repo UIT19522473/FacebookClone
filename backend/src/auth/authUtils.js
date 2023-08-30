@@ -35,7 +35,7 @@ const renewToken = async (req, res, next) => {
         const decodeUser = jwt.verify(refreshToken, PRIVATE_KEY);
         if (decodeUser) throw new ForbiddenError('Invalid User');
         const user = await findUserById(decodeUser._id);
-        const payload = getInfoData({ fields: ['_id', 'firstName', 'lastName', 'email'], object: user });
+        const payload = getInfoData({ fields: ['_id', 'name', 'email'], object: user });
         const accessToken = await jwt.sign(payload, PRIVATE_KEY, {
             expiresIn: '2 days'
         })

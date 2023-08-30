@@ -42,12 +42,12 @@ class AccessService {
         const match = await bcrypt.compare(password, user.password);
         if (!match) throw new AuthFailureError('password wrong');
 
-        const tokens = await createTokenPair({ _id: user._id, firstName: user.firstName, lastName: user.lastName, email: user.email }, PRIVATE_KEY);
+        const tokens = await createTokenPair({ _id: user._id, name: user.name, email: user.email }, PRIVATE_KEY);
 
         return {
             code: 200,
             metadata: {
-                user: getInfoData({ fields: ['_id', 'firstName', 'lastName', 'email'], object: user }),
+                user: getInfoData({ fields: ['_id', 'name', 'img', 'email'], object: user }),
                 tokens
             }
         }
