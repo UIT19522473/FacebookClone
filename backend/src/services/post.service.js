@@ -4,10 +4,7 @@ class PostService {
     static createPost = async ({ userId, desc, img }) => {
         const newPost = await postModel.create({ userId, desc, img });
         return {
-            code: 201,
-            metadata: {
                 post: newPost
-            }
         }
     }
 
@@ -23,10 +20,7 @@ class PostService {
             .populate('userId')
             .populate('commentsId')
         return {
-            code: 200,
-            metadata: {
                 post: listPost
-            }
         }
     }
 }

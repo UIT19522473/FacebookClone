@@ -13,10 +13,7 @@ class CommentService {
             commentParent.commentsChild.push(commentChild);
             await  commentParent.save();
             return {
-                code: 201,
-                metadata: {
                     comment: commentChild
-                }
             }
         }
         //comment Parent
@@ -24,10 +21,7 @@ class CommentService {
             const newComment = await commentModel.create({userId, text});
             await PostService.addCommentToPost({commentId: newComment._id, postId});
             return {
-                code: 201,
-                metadata: {
                     comment: newComment
-                }
             }
         }
     }

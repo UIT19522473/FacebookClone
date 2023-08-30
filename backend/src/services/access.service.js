@@ -26,11 +26,10 @@ class AccessService {
         if (newUser) {
             const tokens = await createTokenPair({ _id: newUser._id, name, email }, PRIVATE_KEY);
             return {
-                code: 201,
-                metadata: {
+
                     user: getInfoData({ fields: ['_id', 'name', 'img', 'email'], object: newUser }),
                     tokens
-                }
+
             }
         }
 
@@ -45,11 +44,10 @@ class AccessService {
         const tokens = await createTokenPair({ _id: user._id, name: user.name, email: user.email }, PRIVATE_KEY);
 
         return {
-            code: 200,
-            metadata: {
+
                 user: getInfoData({ fields: ['_id', 'name', 'img', 'email'], object: user }),
-                tokens
-            }
+            tokens
+
         }
     }
 
