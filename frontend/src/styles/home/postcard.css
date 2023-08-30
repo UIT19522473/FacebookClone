@@ -1,0 +1,67 @@
+.post-card {
+  color: var(--color-text-primary);
+  font-weight: 500;
+  font-size: 16px;
+  background-color: var(--bg-header);
+  padding: 12px 0;
+  border-radius: 12px;
+}
+
+.header-control-close {
+  color: var(--color-text-primary);
+}
+
+.post-card-header,
+.post-card-footer,
+.post-card-body-cap {
+  padding: 0 16px;
+}
+
+.wrap-icon-like {
+  background-color: var(--blue-facebook);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100%;
+  padding: 4px;
+}
+
+.post-card-body-description {
+  color: var(--color-text-secondary);
+}
+
+.post-card-footer {
+  border-top: 1px solid var(--bg-secondary);
+  margin-top: 12px;
+  padding: 8px 0;
+  color: var(--color-text-secondary);
+  margin: 12px;
+}
+
+.post-card-footer-view-comment {
+  border-top: 1px solid var(--bg-secondary);
+  padding-top: 8px;
+}
+
+.wrap-comment-user {
+  background-color: var(--bg-secondary);
+  padding: 4px 12px;
+  border-radius: 18px;
+  width: fit-content;
+}
+
+.wrap-comment-user-controller {
+  font-size: 14px;
+  margin-left: 4px;
+}
+
+.btn-user-controller:hover {
+  text-decoration: underline;
+}
+
+.wrap-write-comment-text {
+  background: var(--bg-secondary);
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 24px;
+}

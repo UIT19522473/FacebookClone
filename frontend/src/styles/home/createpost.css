@@ -1,0 +1,95 @@
+.wrap-create-post {
+  background-color: var(--bg-header);
+  color: var(--color-text-primary);
+  font-weight: 500;
+}
+.create-post-select {
+  background-color: var(--bg-secondary);
+  cursor: pointer;
+  font-size: 14px;
+  padding: 1px 2px;
+  border-radius: 4px;
+  margin-top: 2px;
+}
+.create-post-select option {
+  background-color: var(--bg-secondary);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.wrap-create-post-title {
+  border-bottom: 1px solid var(--bg-secondary);
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+}
+
+.create-post-btnclose {
+  padding: 6px;
+  border-radius: 100%;
+  background-color: var(--bg-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.create-post-btnclose:hover {
+  background-color: rgb(88, 88, 88);
+}
+
+.create-post-textarea {
+  outline: none;
+  background-color: transparent;
+  border: none;
+  width: 100%;
+  font-size: 18px;
+}
+
+.create-post-img {
+  /* max-height: 360px; */
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-image {
+  object-fit: contain;
+  max-height: 360px; /* Đảm bảo hình ảnh không vượt quá chiều cao tối đa */
+  width: 100%;
+}
+
+.create-post-add {
+  padding: 12px;
+  border: solid 1px var(--bg-secondary);
+  border-radius: 12px;
+  font-size: 14px;
+}
+
+/* .create-post-textarea:focus {
+  outline: var(--bg-header);
+} */
+
+/* UploadButton.css */
+.upload-button-label {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  text-indent: 100%;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.upload-button-label input[type="file"] {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.create-post-btnpost {
+  width: 100%;
+  background-color: var(--bg-secondary);
+  padding: 8px;
+  border-radius: 12px;
+}

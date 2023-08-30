@@ -1,0 +1,62 @@
+.home-nav-left {
+  padding: 16px 12px;
+  color: var(--color-text-primary);
+  font-weight: 500;
+  max-height: 850px;
+  overflow-y: scroll;
+  position: fixed;
+  left: 0;
+}
+
+/* .home-list-item:hover {
+  overflow-y: scroll;
+} */
+
+.btn-expand {
+  display: flex;
+  /* color: var(--color-text-primary); */
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.icon-expand {
+  padding: 4px;
+  border-radius: 100%;
+  background-color: var(--bg-secondary);
+}
+
+.home-nav-left-menu {
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--bg-secondary);
+}
+
+.home-nav-left-link {
+  margin-top: 12px;
+}
+
+/* custom scoll bar */
+/* Ẩn thanh cuộn mặc định trên các trình duyệt WebKit */
+.home-nav-left::-webkit-scrollbar {
+  width: 10px;
+  background-color: transparent;
+
+  /* border-radius: 24px; */
+}
+
+/* Tùy chỉnh màu sắc của thanh cuộn */
+.home-nav-left:hover::-webkit-scrollbar-thumb {
+  background-color: var(--bg-secondary);
+  border-radius: 24px;
+}
+
+/* Tùy chỉnh màu nền của khu vực thanh cuộn */
+.home-nav-left:hover::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+/* Tùy chỉnh màu sắc khi di chuột vào thanh cuộn */
+.home-nav-left:hover::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-text-secondary);
+  cursor: pointer;
+}

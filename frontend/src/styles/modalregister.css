@@ -1,0 +1,38 @@
+.wrap-form-register {
+  padding: 12px;
+}
+
+.form-register-header {
+  border-bottom: 1px solid var(--color-text-secondary);
+  padding-bottom: 8px;
+  margin-bottom: 4px;
+}
+
+.form-register-row-input {
+  /* background-color: red; */
+  display: flex;
+  gap: 8px;
+}
+
+.form-register-row-input input {
+  flex: 1;
+  border: 1px solid var(--color-text-secondary);
+  padding: 6px 8px;
+  margin-top: 12px;
+  border-radius: 4px;
+  outline: none;
+  background-color: rgb(245, 245, 245);
+}
+
+.form-register-row-title {
+  color: gray;
+}
+
+.wrap-radio-gender {
+  border: 1px solid var(--color-text-secondary);
+  padding: 4px 16px;
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  border-radius: 4px;
+}
