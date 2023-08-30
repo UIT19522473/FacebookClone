@@ -1,30 +1,38 @@
-const _ = require('lodash');
-const AWS = require('aws-sdk');
-const multer = require('multer');
-const multerS3 = require('multer-s3');
+const _ = require("lodash");
+const AWS = require("aws-sdk");
+const multer = require("multer");
+const multerS3 = require("multer-s3");
 
 const getInfoData = ({ fields = [], object = {} }) => {
-    return _.pick(object, fields);
-}
+  return _.pick(object, fields);
+};
 
 // Create S3 service object
+AWS.config.update({
+  //   accessKeyId: "AKIAVWSJAMTGV5RIVCY2",
+  //   secretAccessKey: "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",
+  accessKeyId: process.env.ACCESSKEYID,
+  secretAccessKey: process.env.SECRETACCESSKEY,
+});
+
+// AKIAVWSJAMTGV5RIVCY2
+// QyGN2WQQgxhPmnGkoF/Xu9yv+UrjOGkuEucxmUlP
 const s3 = new AWS.S3();
 
-
 const upload = multer({
-    storage: multerS3({
-        s3: s3,
-        bucket: 'phucnvh',
-        contentType: multerS3.AUTO_CONTENT_TYPE,
-        metadata: function (req, file, cb) {
-            cb(null, { fieldName: file.fieldname });
-        },
-        key: function (req, file, cb) {
-            cb(null, Date.now().toString() + '-' + file.originalname);
-        }
-    })
-})
+  storage: multerS3({
+    s3: s3,
+    bucket: "phucnvh",
+    contentType: multerS3.AUTO_CONTENT_TYPE,
+    metadata: function (req, file, cb) {
+      cb(null, { fieldName: file.fieldname });
+    },
+    key: function (req, file, cb) {
+      cb(null, Date.now().toString() + "-" + file.originalname);
+    },
+  }),
+});
 module.exports = {
-    getInfoData,
-    upload
-}
+  getInfoData,
+  upload,
+};
