@@ -1,13 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { apiGetAllBrands } from "../../apis/apiBrands";
+import { apiSubmitPost } from "../../apis/apiSubmitPost";
 
 //login by thunk
-export const getAllBrands = createAsyncThunk(
+export const submitPost = createAsyncThunk(
   // Tên action
-  "brand/getAllBrands",
+  "post/submitPost",
   //   Code async logic, tham số đầu tiên data là dữ liệu truyền vào khi gọi action
   async (data, { rejectWithValue }) => {
-    const response = await apiGetAllBrands();
+    const response = await apiSubmitPost(data);
 
     const jsonData = response.data;
 

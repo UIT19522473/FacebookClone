@@ -11,9 +11,11 @@ import { HiMenu } from "react-icons/hi";
 import IconFacebook from "../../src/images/facebook.svg";
 import ButtonSwitchPage from "./Home/ButtonSwitchPage";
 import RightItem from "./Home/RightItem";
+import { useSelector } from "react-redux";
 
 const Header = () => {
   const [selectedPage, setSelectedPage] = useState(1);
+  const auth = useSelector((state) => state.auth);
   return (
     <header className="grid grid-cols-12 header">
       <div className="lg:col-span-3 col-span-2 flex gap-1 my-2 items-center">
@@ -100,7 +102,13 @@ const Header = () => {
         </RightItem>
         {/* btn user */}
         <RightItem id={5}>
-          <BiSolidUser />
+          {/* <BiSolidUser /> */}
+
+          <img
+            className="w-8 h-8 rounded-full"
+            src={auth?.data?.user?.img}
+            alt="logo"
+          />
         </RightItem>
 
         {/* <div className="wrap-header-right-item header-menu text-xl">

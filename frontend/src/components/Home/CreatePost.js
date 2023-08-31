@@ -3,7 +3,11 @@
 import "../../styles/home/createpost.css";
 import React, { useRef, useState } from "react";
 import { BsFileEarmarkImage } from "react-icons/bs";
-import IconFacebook from "../../images/facebook.svg";
+// import IconFacebook from "../../images/facebook.svg";
+import { useSelector, useDispatch } from "react-redux";
+import { submitPost } from "../../features/post/postAsync";
+import { apiSubmitPost } from "../../apis/apiSubmitPost";
+import axios from "axios";
 
 //selected
 const Dropdown = () => {
@@ -37,6 +41,8 @@ const Dropdown = () => {
 };
 
 const CreatePost = (props) => {
+  const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth?.data);
   const { open, setOpen } = props;
 
   //state post
@@ -44,6 +50,7 @@ const CreatePost = (props) => {
   const [desc, setDesc] = useState("");
   const [type, setType] = useState("public");
   const [imageURL, setImageURL] = useState("");
+  const [imgURLLocal, setImgURLLocal] = useState("");
 
   //file
   const fileInputRef = useRef(null);
@@ -57,18 +64,24 @@ const CreatePost = (props) => {
     const file = event.target.files[0];
     if (file) {
       const imageURL = URL.createObjectURL(file);
+
       setImageURL(imageURL);
+      setImgURLLocal(file);
     }
   };
 
   //submit post
-  const handleSubmitPost = () => {
-    console.log({
-      userId,
-      desc,
-      type,
-      imageURL,
-    });
+  const handleSubmitPost = async () => {
+    const formData = new FormData();
+    formData.append("image", imgURLLocal);
+
+    dispatch(
+      submitPost({
+        formData,
+        desc: desc,
+        token: auth?.tokens?.accessToken,
+      })
+    );
   };
 
   return (
@@ -85,10 +98,14 @@ const CreatePost = (props) => {
         </div>
         <div className="wrap-create-post-user flex items-center gap-2">
           <div className="create-post-user-img rounded-full w-12 h-12">
-            <img className="w-full h-full" src={IconFacebook} alt="logo" />
+            <img
+              className="w-full h-full rounded-full"
+              src={auth?.user?.img}
+              alt="logo"
+            />
           </div>
           <div className="create-post-user-info">
-            <p className="text-base">Tuan Nguyen</p>
+            <p className="text-base">{auth?.user?.email}</p>
 
             <Dropdown />
           </div>
@@ -101,7 +118,7 @@ const CreatePost = (props) => {
             onChange={(e) => setDesc(e.target.value)}
             value={desc}
             className="create-post-textarea "
-            placeholder="Tuân ơi, bạn đang nghĩ gì thế"
+            placeholder={`${auth?.user?.email}, bạn đang nghĩ gì thế`}
           />
         </div>
         <div className="create-post-img">

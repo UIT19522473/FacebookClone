@@ -1,15 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { signIn } from "./authAsync";
+import { submitPost } from "./postAsync";
 
 const initialState = {
   isLoading: false,
   success: false,
   mes: "",
-  data: null,
+  data: [],
 };
 
-export const authSlice = createSlice({
-  name: "auth",
+export const postSlice = createSlice({
+  name: "post",
   initialState,
   reducers: {
     // increment: (state) => {
@@ -30,22 +30,22 @@ export const authSlice = createSlice({
   //    Code logic xử lý async action
   extraReducers: (builder) => {
     // Bắt đầu thực hiện action login (Promise pending)
-    builder.addCase(signIn.pending, (state) => {
+    builder.addCase(submitPost.pending, (state) => {
       // Bật trạng thái loading
       state.isLoading = true;
     });
 
     // Khi thực hiện action login thành công (Promise fulfilled)
-    builder.addCase(signIn.fulfilled, (state, action) => {
+    builder.addCase(submitPost.fulfilled, (state, action) => {
       // Tắt trạng thái loading, lưu thông tin user vào store
       state.isLoading = false;
       state.success = true;
-      state.data = action.payload.metadata || null;
+      state.data = [action.payload.metadata.post, ...state.data] || null;
       state.mes = action.payload.message;
     });
 
     // Khi thực hiện action login thất bại (Promise rejected)
-    builder.addCase(signIn.rejected, (state, action) => {
+    builder.addCase(submitPost.rejected, (state, action) => {
       // Tắt trạng thái loading, lưu thông báo lỗi vào store
       state.isLoading = false;
       state.success = false;
@@ -58,4 +58,4 @@ export const authSlice = createSlice({
 // Action creators are generated for each case reducer function
 // export const { increment, decrement, incrementByAmount } = counterSlice.actions;
 
-export default authSlice.reducer;
+export default postSlice.reducer;

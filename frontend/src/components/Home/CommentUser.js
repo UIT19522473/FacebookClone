@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import "../../styles/home/postcard.css";
 import IconFacebook from "../../images/facebook.svg";
-// import RepCommentUser from "./RepCommentUser";
-// import { Link } from "react-router-dom";
+
+import { useSelector } from "react-redux";
 
 const CommentUser = (props) => {
+  const auth = useSelector((state) => state.auth?.data);
   const [openWrite, setOpenWrite] = useState(false);
   const { author, content, replies } = props;
   return (
@@ -45,10 +46,18 @@ const CommentUser = (props) => {
       )}
       {openWrite ? (
         <div className="flex items-center comment-user-write mt-3 gap-1">
-          <p>avatar</p>
-          <span className="flex items-center gap-1">
-            <p>tag name</p>
-            <input type="text" />
+          <img className="w-8 rounded-full" src={auth?.user?.img} alt="" />
+          <span className="flex items-center gap-1 comment-user-write-input w-full">
+            <p className="bg-blue-900 text-white px-1">name auth posted</p>
+            <input
+              className="bg-transparent border-none outline-none flex-1 break-words"
+              type="text"
+            />
+            <button className="ml-auto flex items-center comment-user-write-btn-send">
+              <span className="material-symbols-outlined text-lg font-bold">
+                send
+              </span>
+            </button>
           </span>
         </div>
       ) : (

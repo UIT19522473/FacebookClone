@@ -1,22 +1,32 @@
-import React from "react";
+import React, { useState } from "react";
 import "../styles/modalregister.css";
 import { AiFillQuestionCircle } from "react-icons/ai";
 
 import { Select } from "antd";
 import { dataDay, dataMonth, dataYear } from "../helps/dataBirthDay";
 import { apiSignUp } from "../apis/apiAuth";
+import { Link } from "react-router-dom";
 
 const Register = (props) => {
   const { open, setOpen } = props;
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [pass, setPass] = useState("");
 
   //handle when sign up
   const handleSignUp = async () => {
-    const response = await apiSignUp({
-      name: "test",
-      email: "test2@gmail.com",
-      password: "123",
-    });
-    console.log(response);
+    try {
+      const response = await apiSignUp({
+        name: name,
+        email: email,
+        password: pass,
+      });
+      if (response.data.status === 201) {
+        alert(response.data.message);
+      }
+    } catch (error) {
+      alert(error.message);
+    }
   };
   return (
     <div className="wrap-form-register">
@@ -36,19 +46,35 @@ const Register = (props) => {
       </div>
       <div className="form-register-body">
         <div className="form-register-row-input">
-          <input type="text" name="" id="" placeholder="Họ" />
-          <input type="text" name="" id="" placeholder="Tên" />
+          <input type="text" name="ho" id="ho" placeholder="Họ" />
+          <input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            type="text"
+            name="ten"
+            id="ten"
+            placeholder="Tên"
+          />
         </div>
         <div className="form-register-row-input">
           <input
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             type="text"
-            name=""
-            id=""
+            name="mail"
+            id="mail"
             placeholder="Số di động hoặc email"
           />
         </div>
         <div className="form-register-row-input">
-          <input type="text" name="" id="" placeholder="Mật khẩu mới" />
+          <input
+            value={pass}
+            onChange={(e) => setPass(e.target.value)}
+            type="text"
+            name="newpass"
+            id="newpass"
+            placeholder="Mật khẩu mới"
+          />
         </div>
 
         <div className="form-register-row-select mt-3">
@@ -107,10 +133,9 @@ const Register = (props) => {
         <p className="text-xs">
           Những người dùng dịch vụ của chúng tôi có thể đã tải thông tin liên hệ
           của bạn lên Facebook.
-          <a href="#" className="text-blue-900">
-            {" "}
+          <Link href="#" className="text-blue-900">
             Tìm hiểu thêm
-          </a>
+          </Link>
         </p>
         <p className="text-xs mt-3">
           Bằng cách nhấp vào Đăng ký, bạn đồng ý với Điều khoản, Chính sách

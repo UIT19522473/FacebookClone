@@ -1,17 +1,45 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../styles/login.css";
 import LogoFacebook from "../images/fb_logo.svg";
 
 import Modal from "../components/Modal";
 import Register from "../components/Register";
+import { Link, useNavigate } from "react-router-dom";
+
+import { useDispatch, useSelector } from "react-redux";
+import { signIn } from "../features/auth/authAsync";
+// import { apiSignIn } from "../apis/apiAuth";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth);
   const [open, setOpen] = useState(false);
+
+  const [email, setEmail] = useState("");
+  const [pass, setPass] = useState("");
 
   //open form register
   const handleCreateAccount = () => {
     setOpen(!open);
   };
+
+  //handle login
+  const handleLogin = async () => {
+    dispatch(
+      signIn({
+        email: email,
+        password: pass,
+      })
+    );
+  };
+
+  useEffect(() => {
+    if (auth.data?.user) {
+      navigate("/");
+    }
+  }, [auth, navigate]);
+
   return (
     <div className="wrap-login">
       {open ? (
@@ -32,32 +60,38 @@ const Login = () => {
           <div className="col-form">
             <div className="form-container">
               <input
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="rounded-lg"
                 type="text"
                 placeholder="Email address or phone number "
               />
               <input
+                value={pass}
+                onChange={(e) => setPass(e.target.value)}
                 className="rounded-lg"
                 type="password"
                 placeholder="Password"
               />
-              <button className="btn-login">Login</button>
+              <button onClick={handleLogin} className="btn-login">
+                Login
+              </button>
 
-              <a href="#">Forgotten password?</a>
+              <Link to="#">Forgotten password?</Link>
               <button onClick={handleCreateAccount} className="btn-new">
                 Create new Account
               </button>
             </div>
             <p>
-              <a className="mr-1" href="#">
+              <Link className="mr-1" to="#">
                 <b>Create a Page</b>
-              </a>
+              </Link>
               for a celebrity, brand or business.
             </p>
           </div>
         </div>
       </main>
-      <footer className="footer-login">
+      {/* <footer className="footer-login">
         <div className="footer-contents">
           <ol>
             <li>English (UK)</li>
@@ -216,7 +250,7 @@ const Login = () => {
           <small>Facebook © 2021</small>
         </div>
       </footer>
-      ;
+      ; */}
     </div>
   );
 };

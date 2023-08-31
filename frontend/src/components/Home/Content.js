@@ -13,8 +13,10 @@ import StoryCard from "./StoryCard";
 import Modal from "../Modal";
 // import Register from "../Register";
 import CreatePost from "./CreatePost";
+import { useSelector } from "react-redux";
 
 const Content = () => {
+  const auth = useSelector((state) => state.auth?.data?.user);
   const [open, setOpen] = useState(false);
   const handleOpenCreatePost = () => {
     setOpen(true);
@@ -43,14 +45,14 @@ const Content = () => {
       <section className="home-mypost -mt-4">
         <div className="home-mypost-wrap-title flex gap-3 items-center">
           <div className="mypost-title-avatar">
-            <img className="w-14 h-14" src={ImgFacebook} alt="logo" />
+            <img className="w-12 rounded-full" src={auth?.img} alt="logo" />
           </div>
           <button
             onClick={handleOpenCreatePost}
             className="mypost-title-text w-full"
           >
             <p className="w-full  bg-transparent text-start mypost-btn-thinking">
-              Tuan oi, ban dang nghi gi the?
+              {auth?.email}, ban dang nghi gi the?
             </p>
           </button>
         </div>
