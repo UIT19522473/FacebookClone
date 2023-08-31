@@ -34,7 +34,9 @@ class PostService {
                 for (let k=0; k< listPost[i].commentsId[j].commentsChild.length; k++)
                 {
                     let temp = listPost[i].commentsId[j].commentsChild[k].reply;
-
+                    let user1 =  listPost[i].commentsId[j].commentsChild[k].userId;
+                    const getUser1 = await findUserById(user1);
+                    listPost[i].commentsId[j].commentsChild[k].userId = getUser1;
                     if (temp) {
                          const user = (await findUserById(temp));
                          listPost[i].commentsId[j].commentsChild[k].reply = user;
