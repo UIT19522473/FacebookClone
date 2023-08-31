@@ -15,15 +15,9 @@ const commentSchema = new Schema({
         require
     },
     reply: {
-        name: {
-            type: String,
-            default: "",
-        },
-        _id: {
-            type: String,
-            default: "",
-        },
-        default: {}
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        default: "",
     },
     parentId: {
         type: String,
