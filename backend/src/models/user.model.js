@@ -8,6 +8,7 @@ const userSchema = new Schema({
         type: String,
         trim: true,
         maxLength: 255,
+        require,
     },
     img: {
         type: String,
@@ -16,12 +17,14 @@ const userSchema = new Schema({
     email: {
         type: String,
         trim: true,
-        maxLength: 255
+        maxLength: 255,
+        require
     },
     password: {
         type: String,
         trim: true,
-        maxLength: 255
+        maxLength: 255,
+        require
     },
     verify: {
         type: Schema.Types.Boolean,
