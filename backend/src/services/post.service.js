@@ -25,12 +25,19 @@ class PostService {
 
         for (let i=0; i< listPost.length; i++) {
             for (let j=0; j< listPost[i].commentsId.length; j++) {
+                let userId = listPost[i].commentsId[j].userId;
+
+                const getTemp = await findUserById(userId);
+                listPost[i].commentsId[j].userId = getTemp;
+                console.log('Day la user ',listPost[i].commentsId[j].userId);
+
                 for (let k=0; k< listPost[i].commentsId[j].commentsChild.length; k++)
                 {
                     let temp = listPost[i].commentsId[j].commentsChild[k].reply;
+
                     if (temp) {
                          const user = (await findUserById(temp));
-                         listPost[i].commentsId[j].commentsChild[k].reply = getInfoData({ fields: ['_id', 'name', 'img', 'email'], object: user });
+                         listPost[i].commentsId[j].commentsChild[k].reply = user;
                     }
                 }
             }
