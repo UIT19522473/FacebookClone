@@ -17,7 +17,7 @@ const commentSchema = new Schema({
     reply: {
         type: Schema.Types.ObjectId,
         ref: 'User',
-        default: "",
+        default: null,
     },
     parentId: {
         type: String,

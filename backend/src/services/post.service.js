@@ -20,7 +20,7 @@ class PostService {
             .find()
             .populate("userId")
             .populate("commentsId")
-            .populate("reply");
+        console.log(listPost);
         return {
             post: listPost,
         };
