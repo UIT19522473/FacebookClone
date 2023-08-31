@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import IconFacebook from "../../images/facebook.svg";
 import "../../styles/home/postcard.css";
 import { BsThreeDots, BsEmojiLaughing } from "react-icons/bs";
@@ -14,8 +14,36 @@ import { CiChat2 } from "react-icons/ci";
 import { PiShareFat } from "react-icons/pi";
 
 import CommentUser from "./CommentUser";
+import { useSelector, useDispatch } from "react-redux";
+import { apiCommentParent } from "../../apis/apiComment";
+import { getAllPosts } from "../../features/post/postAsync";
 
-const PostCard = () => {
+const PostCard = (props) => {
+  const dispatch = useDispatch();
+  const { post } = props;
+  const auth = useSelector((state) => state.auth?.data?.user);
+  const inforAuth = useSelector((state) => state.auth?.data);
+
+  // console.log(token);
+  const [comment, setComment] = useState("");
+
+  const handleKeyPress = async (event) => {
+    if (event.key === "Enter") {
+      // Xử lý logic sau khi người dùng nhấn Enter
+      // console.log("Enter pressed! Input value: ", comment);
+      await apiCommentParent({
+        content: {
+          text: comment,
+          postId: post?._id,
+        },
+        token: inforAuth?.tokens?.accessToken,
+      });
+
+      dispatch(getAllPosts({ token: inforAuth?.tokens?.accessToken }));
+
+      // console.log(response);
+    }
+  };
   const comments = [
     {
       author: "User 1",
@@ -42,10 +70,14 @@ const PostCard = () => {
     <div className="post-card mt-4">
       <div className="post-card-header flex ">
         <div className="post-card-header-avatar">
-          <img src={IconFacebook} alt="logo" />
+          <img
+            className="w-12 rounded-full"
+            src={post?.userId?.img}
+            alt="logo"
+          />
         </div>
         <div className="post-card-header-info ml-2">
-          <p>tuan nguyen</p>
+          <p>{post?.userId?.email}</p>
           <p>30 phut</p>
         </div>
         <div className="post-card-header-control ml-auto flex items-center gap-3">
@@ -58,15 +90,13 @@ const PostCard = () => {
         </div>
       </div>
       <div className="post-card-body mt-2">
-        <div className="post-card-body-cap mb-4">
-          Troi hom nay nhieu may cuc
-        </div>
+        <div className="post-card-body-cap mb-4">{post?.desc}</div>
         <div className="post-card-body-img flex justify-center items-center">
-          <img
-            className="w-full"
-            src="https://taimienphi.vn/tmp/cf/aut/anh-gai-xinh-1.jpg"
-            alt="logo"
-          />
+          {post?.img ? (
+            <img className="w-full" src={post?.img} alt="logo" />
+          ) : (
+            <></>
+          )}
         </div>
         <div className="post-card-body-description flex justify-between px-3 mt-2">
           <div className="post-card-viewlike flex items-center gap-1">
@@ -106,7 +136,7 @@ const PostCard = () => {
             Xem them binh luan
           </button>
           <ul className="post-card-footer-comment mt-2 gap-3 flex flex-col">
-            {comments.map((comment, index) => (
+            {/* {comments.map((comment, index) => (
               <li key={index}>
                 <CommentUser
                   author={comment.author}
@@ -114,12 +144,36 @@ const PostCard = () => {
                   replies={comment.replies}
                 />
               </li>
-            ))}
+            ))} */}
+
+            {post?.commentsId ? (
+              post?.commentsId.map((item, index) => (
+                <li key={index}>
+                  <CommentUser
+                    cmt={item}
+                    postId={post?._id}
+
+                    //  author={comment.author}
+                    //  content={comment.content}
+                    //  replies={comment.replies}
+                  />
+                </li>
+              ))
+            ) : (
+              <></>
+            )}
           </ul>
           <div className="wrap-write-comment mt-4 flex items-center gap-1">
-            <img className="w-10 h-10" src={IconFacebook} alt="logo" />
+            <img
+              className="w-10 h-10 rounded-full"
+              src={auth?.img}
+              alt="logo"
+            />
             <div className="wrap-write-comment-text flex items-center">
               <input
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                onKeyDown={handleKeyPress}
                 className="bg-transparent border-none outline-none px-1 w-full"
                 type="text"
                 placeholder="Viet binh luan..."

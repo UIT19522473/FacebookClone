@@ -21,13 +21,28 @@ const upload = multer({
     bucket: "phucnvh",
     contentType: multerS3.AUTO_CONTENT_TYPE,
     metadata: function (req, file, cb) {
+      console.log("metadata", file);
       cb(null, { fieldName: file.fieldname });
     },
     key: function (req, file, cb) {
+      console.log("key", file);
       cb(null, Date.now().toString() + "-" + file.originalname);
     },
   }),
 });
+
+///test-----------
+// const storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     console.log("metadata", file);
+//     cb(null, "uploads/"); // Đường dẫn lưu trữ tệp
+//   },
+//   filename: function (req, file, cb) {
+//     console.log("key", file);
+//     cb(null, file.originalname); // Giữ tên gốc của tệp
+//   },
+// });
+// const uploadTest = multer({ storage: storage });
 module.exports = {
   getInfoData,
   upload,

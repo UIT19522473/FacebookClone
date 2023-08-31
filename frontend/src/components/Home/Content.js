@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../../styles/home/content.css";
 import { BiSolidVideoPlus } from "react-icons/bi";
 import { FaImages } from "react-icons/fa";
 import { BsFillEmojiLaughingFill } from "react-icons/bs";
 
-import ImgFacebook from "../../images/facebook.svg";
+// import ImgFacebook from "../../images/facebook.svg";
 import PostCard from "./PostCard";
 import Slider from "react-slick";
 import { settingStory } from "../../helps/settingSlider";
@@ -13,14 +13,29 @@ import StoryCard from "./StoryCard";
 import Modal from "../Modal";
 // import Register from "../Register";
 import CreatePost from "./CreatePost";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { getAllPosts } from "../../features/post/postAsync";
+// import { apiGetAllPost } from "../../apis/apiPost";
 
 const Content = () => {
+  const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth?.data?.user);
+  const token = useSelector((state) => state.auth?.data?.tokens?.accessToken);
+  const posts = useSelector((state) => state.post?.data);
+
+  // const checkAPost = useSelector((state) => state.post?.data?.postCurrent);
+
   const [open, setOpen] = useState(false);
   const handleOpenCreatePost = () => {
     setOpen(true);
   };
+
+  useEffect(() => {
+    dispatch(getAllPosts({ token: token }));
+  }, [token, dispatch]);
+
+  // console.log(posts);
+
   return (
     <div className="home-content mt-3">
       {open ? (
@@ -72,8 +87,13 @@ const Content = () => {
         </div>
       </section>
       <section className="home-common-post">
-        <PostCard />
-        <PostCard />
+        {posts ? (
+          posts?.map((post, index) => <PostCard post={post} key={index} />)
+        ) : (
+          <></>
+        )}
+        {/* <PostCard />
+        <PostCard /> */}
       </section>
     </div>
   );

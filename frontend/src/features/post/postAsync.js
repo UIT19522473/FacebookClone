@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { apiSubmitPost } from "../../apis/apiSubmitPost";
+import { apiGetAllPost, apiSubmitPost } from "../../apis/apiPost";
 
 //login by thunk
 export const submitPost = createAsyncThunk(
@@ -8,6 +8,26 @@ export const submitPost = createAsyncThunk(
   //   Code async logic, tham số đầu tiên data là dữ liệu truyền vào khi gọi action
   async (data, { rejectWithValue }) => {
     const response = await apiSubmitPost(data);
+
+    const jsonData = response.data;
+
+    // Nếu bị lỗi thì reject
+    if (response.status < 200 || response.status >= 300) {
+      return rejectWithValue(jsonData);
+    }
+
+    // Còn không thì trả về dữ liệu
+    return jsonData;
+  }
+);
+
+//login by thunk
+export const getAllPosts = createAsyncThunk(
+  // Tên action
+  "post/getAllPosts",
+  //   Code async logic, tham số đầu tiên data là dữ liệu truyền vào khi gọi action
+  async (data, { rejectWithValue }) => {
+    const response = await apiGetAllPost(data);
 
     const jsonData = response.data;
 

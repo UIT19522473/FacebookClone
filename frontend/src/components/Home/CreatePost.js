@@ -1,13 +1,12 @@
 // import TextArea from "antd/es/input/TextArea";
 
 import "../../styles/home/createpost.css";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { BsFileEarmarkImage } from "react-icons/bs";
 // import IconFacebook from "../../images/facebook.svg";
 import { useSelector, useDispatch } from "react-redux";
-import { submitPost } from "../../features/post/postAsync";
-import { apiSubmitPost } from "../../apis/apiSubmitPost";
-import axios from "axios";
+import { getAllPosts, submitPost } from "../../features/post/postAsync";
+import { apiGetAllPost } from "../../apis/apiPost";
 
 //selected
 const Dropdown = () => {
@@ -60,6 +59,21 @@ const CreatePost = (props) => {
     fileInputRef.current.click();
   };
 
+  //submit post
+  const handleSubmitPost = async () => {
+    await dispatch(
+      submitPost({
+        content: {
+          img: imgURLLocal,
+          desc: desc,
+        },
+        token: auth?.tokens?.accessToken,
+      })
+    );
+    await dispatch(getAllPosts({ token: auth?.tokens?.accessToken }));
+    setOpen(false);
+  };
+
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -68,20 +82,6 @@ const CreatePost = (props) => {
       setImageURL(imageURL);
       setImgURLLocal(file);
     }
-  };
-
-  //submit post
-  const handleSubmitPost = async () => {
-    const formData = new FormData();
-    formData.append("image", imgURLLocal);
-
-    dispatch(
-      submitPost({
-        formData,
-        desc: desc,
-        token: auth?.tokens?.accessToken,
-      })
-    );
   };
 
   return (

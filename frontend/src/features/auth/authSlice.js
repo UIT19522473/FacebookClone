@@ -40,8 +40,8 @@ export const authSlice = createSlice({
       // Tắt trạng thái loading, lưu thông tin user vào store
       state.isLoading = false;
       state.success = true;
-      state.data = action.payload.metadata || null;
-      state.mes = action.payload.message;
+      state.data = action.payload?.metadata || null;
+      state.mes = "login success";
     });
 
     // Khi thực hiện action login thất bại (Promise rejected)
@@ -50,7 +50,7 @@ export const authSlice = createSlice({
       state.isLoading = false;
       state.success = false;
       state.data = null;
-      state.mes = action.payload.message;
+      state.mes = "login fail";
     });
   },
 });

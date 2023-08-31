@@ -1,11 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { submitPost } from "./postAsync";
+import { submitPost, getAllPosts } from "./postAsync";
 
 const initialState = {
   isLoading: false,
   success: false,
   mes: "",
   data: [],
+  postCurrent: null,
 };
 
 export const postSlice = createSlice({
@@ -29,6 +30,7 @@ export const postSlice = createSlice({
 
   //    Code logic xử lý async action
   extraReducers: (builder) => {
+    //async when add a post
     // Bắt đầu thực hiện action login (Promise pending)
     builder.addCase(submitPost.pending, (state) => {
       // Bật trạng thái loading
@@ -40,8 +42,8 @@ export const postSlice = createSlice({
       // Tắt trạng thái loading, lưu thông tin user vào store
       state.isLoading = false;
       state.success = true;
-      state.data = [action.payload.metadata.post, ...state.data] || null;
-      state.mes = action.payload.message;
+      state.postCurrent = action.payload.metadata.post || null;
+      state.mes = "add post success";
     });
 
     // Khi thực hiện action login thất bại (Promise rejected)
@@ -49,8 +51,34 @@ export const postSlice = createSlice({
       // Tắt trạng thái loading, lưu thông báo lỗi vào store
       state.isLoading = false;
       state.success = false;
+      state.postCurrent = null;
+      state.mes = "add post fail";
+    });
+
+    //async when get all posts
+    // Bắt đầu thực hiện action login (Promise pending)
+    builder.addCase(getAllPosts.pending, (state) => {
+      // Bật trạng thái loading
+      state.isLoading = true;
+    });
+
+    // Khi thực hiện action login thành công (Promise fulfilled)
+    builder.addCase(getAllPosts.fulfilled, (state, action) => {
+      // Tắt trạng thái loading, lưu thông tin user vào store
+      state.isLoading = false;
+      state.success = true;
+      // state.data = [action.payload.metadata.post, ...state.data] || [];
+      state.data = action.payload.metadata.post;
+      state.mes = "get posts success";
+    });
+
+    // Khi thực hiện action login thất bại (Promise rejected)
+    builder.addCase(getAllPosts.rejected, (state, action) => {
+      // Tắt trạng thái loading, lưu thông báo lỗi vào store
+      state.isLoading = false;
+      state.success = false;
       state.data = null;
-      state.mes = action.payload.message;
+      state.mes = "get posts fail";
     });
   },
 });

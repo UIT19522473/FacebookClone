@@ -10,22 +10,30 @@ import Game from "./pages/Game";
 import Login from "./pages/Login";
 
 import Test from "./pages/Test";
+import { useSelector } from "react-redux";
 
 const App = () => {
+  const auth = useSelector((state) => state?.auth?.data);
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="login" element={<Login />} />
+        {/* <Route path="login" element={<Login />} /> */}
         {/* <Route path="test" element={<ModalRegister />} /> */}
 
-        <Route path="/" element={<LayOut />}>
-          <Route index element={<Home />} />
-          <Route path="watch" element={<Watch />} />
-          <Route path="group" element={<Group />} />
-          <Route path="game" element={<Game />} />
-          <Route path="test" element={<Test />} />
-          <Route path="*" element={<NotFound />} />
-        </Route>
+        {auth ? (
+          <Route path="/" element={<LayOut />}>
+            <Route index element={<Home />} />
+            <Route path="watch" element={<Watch />} />
+            <Route path="group" element={<Group />} />
+            <Route path="game" element={<Game />} />
+            <Route path="test" element={<Test />} />
+            <Route path="*" element={<NotFound />} />
+          </Route>
+        ) : (
+          <Route path="/">
+            <Route index element={<Login />} />
+          </Route>
+        )}
       </Routes>
     </BrowserRouter>
   );
