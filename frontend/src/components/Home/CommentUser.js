@@ -21,10 +21,7 @@ const CommentUser = (props) => {
       parentId: cmt?._id,
       text: cmtChild,
       postId: postId,
-      reply: {
-        name: "test",
-        _id: cmt?.userId,
-      },
+      reply: cmt?.userId,
     };
     // console.log(content);
 
@@ -38,10 +35,19 @@ const CommentUser = (props) => {
   return (
     <div className="mt-2">
       <div className="comment-user flex items-center gap-1">
-        <img className="w-10 h-10" src={IconFacebook} alt="logo" />
+        <img
+          className="w-10 h-10 rounded-full"
+          src={!cmt?.reply ? cmt?.userId?.img : cmt?.reply?.img}
+          alt="logo"
+        />
         <div className="comemnt-user-title">
           <div className="wrap-comment-user">
-            <p className="text-white">{cmt?.userId}</p>
+            {!cmt?.reply ? (
+              <p className="text-white">{cmt?.userId?.name}</p>
+            ) : (
+              <p className="text-white">{cmt?.reply?.name}</p>
+            )}
+
             <p className="text-white font-normal text-sm">{cmt?.text}</p>
           </div>
           <div className="wrap-comment-user-controller flex items-center gap-3">
@@ -77,7 +83,7 @@ const CommentUser = (props) => {
         <div className="flex items-center comment-user-write mt-3 gap-1">
           <img className="w-8 rounded-full" src={auth?.user?.img} alt="" />
           <span className="flex items-center gap-1 comment-user-write-input w-full">
-            <p className="bg-blue-900 text-white px-1">{cmt?.userId}</p>
+            <p className="bg-blue-900 text-white px-1">{cmt?.userId?.name}</p>
             <input
               value={cmtChild}
               onChange={(e) => setCmtChild(e.target.value)}
