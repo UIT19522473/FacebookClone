@@ -26,6 +26,18 @@ const userSchema = new Schema({
         maxLength: 255,
         require
     },
+    friends: [
+        {
+            _id: {
+                type: Schema.Types.ObjectId,
+                ref: 'User'
+            },
+            status: {
+                type: String,
+                enum: ['SEND', 'FRIEND', 'RECEIVE']
+            }
+        }
+    ],
     verify: {
         type: Schema.Types.Boolean,
         default: true,
