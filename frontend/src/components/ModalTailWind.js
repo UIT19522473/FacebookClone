@@ -4,7 +4,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import "../styles/modalregister.css";
 // import Register from "./Register";
 
-export default function Modal(props) {
+export default function ModalTailWind(props) {
   const { open, setOpen } = props;
 
   const cancelButtonRef = useRef(null);
@@ -15,7 +15,9 @@ export default function Modal(props) {
         as="div"
         className="relative z-10"
         initialFocus={cancelButtonRef}
-        onClose={setOpen}
+        onClose={() => {
+          setOpen(false);
+        }}
       >
         <Transition.Child
           as={Fragment}

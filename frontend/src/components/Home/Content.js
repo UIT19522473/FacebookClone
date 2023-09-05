@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import "../../styles/home/content.css";
 import { BiSolidVideoPlus } from "react-icons/bi";
 import { FaImages } from "react-icons/fa";
@@ -10,24 +10,29 @@ import Slider from "react-slick";
 import { settingStory } from "../../helps/settingSlider";
 import CreateStoryCard from "./CreateStoryCard";
 import StoryCard from "./StoryCard";
-import Modal from "../Modal";
+// import Modal from "../ModalTailWind";
 // import Register from "../Register";
 import CreatePost from "./CreatePost";
 import { useSelector, useDispatch } from "react-redux";
 import { getAllPosts } from "../../features/post/postAsync";
+
+import { openCreatePost } from "../../features/createPost/createPostSlice";
+import ModalCustom from "../ModalCustom";
 // import { apiGetAllPost } from "../../apis/apiPost";
 
 const Content = () => {
   const dispatch = useDispatch();
+  const openPost = useSelector((state) => state.createPost.open);
   const auth = useSelector((state) => state.auth?.data?.user);
   const token = useSelector((state) => state.auth?.data?.tokens?.accessToken);
   const posts = useSelector((state) => state.post?.data);
 
   // const checkAPost = useSelector((state) => state.post?.data?.postCurrent);
 
-  const [open, setOpen] = useState(false);
+  // const [open, setOpen] = useState(false);
   const handleOpenCreatePost = () => {
-    setOpen(true);
+    // setOpen(true);
+    dispatch(openCreatePost());
   };
 
   useEffect(() => {
@@ -36,12 +41,21 @@ const Content = () => {
 
   // console.log(posts);
 
+  // const [openTest, setOpenTest] = useState(false);
+
   return (
     <div className="home-content mt-3">
-      {open ? (
+      {/* {open ? (
         <Modal open={open} setOpen={setOpen}>
-          <CreatePost open={open} setOpen={setOpen} />
+          <CreatePost />
         </Modal>
+      ) : (
+        <></>
+      )} */}
+      {openPost ? (
+        <ModalCustom type="CREATEPOST" open={openPost}>
+          <CreatePost />
+        </ModalCustom>
       ) : (
         <></>
       )}
@@ -62,6 +76,13 @@ const Content = () => {
           <div className="mypost-title-avatar">
             <img className="w-12 rounded-full" src={auth?.img} alt="logo" />
           </div>
+
+          {/* <button
+            onClick={() => dispatch(openCreatePost())}
+            className="bg-white"
+          >
+            Test
+          </button> */}
           <button
             onClick={handleOpenCreatePost}
             className="mypost-title-text w-full"
@@ -92,8 +113,6 @@ const Content = () => {
         ) : (
           <></>
         )}
-        {/* <PostCard />
-        <PostCard /> */}
       </section>
     </div>
   );

@@ -1,32 +1,32 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 
-const Con = (props) => {
-  const { idP, idAuth, name, comment, handleReply } = props;
+// const Con = (props) => {
+//   const { idP, idAuth, name, comment, handleReply } = props;
 
-  return (
-    <div
-      onClick={handleReply({ idAuth, name })}
-      className="ml-6 mt-2 bg-gray-600 flex gap-2"
-    >
-      <p>idP: {idP}</p>
-      <p>idAuth: {idAuth}</p> name = "A"
-      <p>name: {name}</p>
-      <p>{comment}</p>
-    </div>
-  );
-};
+//   return (
+//     <div
+//       onClick={handleReply({ idAuth, name })}
+//       className="ml-6 mt-2 bg-gray-600 flex gap-2"
+//     >
+//       <p>idP: {idP}</p>
+//       <p>idAuth: {idAuth}</p> name = "A"
+//       <p>name: {name}</p>
+//       <p>{comment}</p>
+//     </div>
+//   );
+// };
 
 const Test = () => {
-  const auth = useSelector((state) => state.auth?.data?.user);
-  //reply
-  const [idAuth, setIdAuth] = useState("");
-  const [name, setName] = useState("");
-  const handleReply = (data) => {
-    setIdAuth(data.idAuth);
-    setName(data.name);
-  };
+  // const auth = useSelector((state) => state.auth?.data?.user);
+  // //reply
+  // const [idAuth, setIdAuth] = useState("");
+  // const [name, setName] = useState("");
+  // const handleReply = (data) => {
+  //   setIdAuth(data.idAuth);
+  //   setName(data.name);
+  // };
 
   const [fileUrl, setFileUrl] = useState("");
 

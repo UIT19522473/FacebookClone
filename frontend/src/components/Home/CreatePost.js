@@ -1,12 +1,13 @@
 // import TextArea from "antd/es/input/TextArea";
 
 import "../../styles/home/createpost.css";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { BsFileEarmarkImage } from "react-icons/bs";
 // import IconFacebook from "../../images/facebook.svg";
 import { useSelector, useDispatch } from "react-redux";
 import { getAllPosts, submitPost } from "../../features/post/postAsync";
-import { apiGetAllPost } from "../../apis/apiPost";
+import { closeCreatePost } from "../../features/createPost/createPostSlice";
+// import { apiGetAllPost } from "../../apis/apiPost";
 
 //selected
 const Dropdown = () => {
@@ -42,12 +43,12 @@ const Dropdown = () => {
 const CreatePost = (props) => {
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth?.data);
-  const { open, setOpen } = props;
+  // const { open, setOpen } = props;
 
   //state post
-  const userId = "1";
+  // const userId = "1";
   const [desc, setDesc] = useState("");
-  const [type, setType] = useState("public");
+  // const [type, setType] = useState("public");
   const [imageURL, setImageURL] = useState("");
   const [imgURLLocal, setImgURLLocal] = useState("");
 
@@ -71,7 +72,8 @@ const CreatePost = (props) => {
       })
     );
     await dispatch(getAllPosts({ token: auth?.tokens?.accessToken }));
-    setOpen(false);
+    // setOpen(false);
+    dispatch(closeCreatePost());
   };
 
   const handleImageChange = (event) => {
@@ -84,13 +86,18 @@ const CreatePost = (props) => {
     }
   };
 
+  const handleOnchangeTextArea = (e) => {
+    e.preventDefault();
+    setDesc(e.target.value);
+  };
+
   return (
-    <div className="wrap-create-post p-4">
+    <div className="wrap-create-post p-4 rounded-md w-full">
       <div className="create-post-header">
         <div className="wrap-create-post-title flex items-center ">
           <h2 className="flex-1 text-center text-xl">Tạo bài viết</h2>
           <button
-            onClick={() => setOpen(!open)}
+            onClick={() => dispatch(closeCreatePost())}
             className="ml-auto mr-2 create-post-btnclose"
           >
             <span className="material-symbols-outlined">close</span>
@@ -115,7 +122,7 @@ const CreatePost = (props) => {
       <div className="create-post-body mt-3">
         <div className="create-post-text">
           <textarea
-            onChange={(e) => setDesc(e.target.value)}
+            onChange={handleOnchangeTextArea}
             value={desc}
             className="create-post-textarea "
             placeholder={`${auth?.user?.email}, bạn đang nghĩ gì thế`}
@@ -132,7 +139,7 @@ const CreatePost = (props) => {
           <p>Thêm ảnh vào bài viết của bạn</p>
           <div>
             <button
-              className="upload-button text-green-700"
+              className="upload-button text-green-600"
               onClick={handleButtonClick}
             >
               <BsFileEarmarkImage size={24} />

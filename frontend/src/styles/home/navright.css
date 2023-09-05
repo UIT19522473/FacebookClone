@@ -5,6 +5,7 @@
   max-height: 850px;
   overflow-y: scroll;
   position: fixed;
+  z-index: 1;
   right: 0;
 }
 
