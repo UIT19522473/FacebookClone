@@ -4,26 +4,28 @@ import "../../styles/home/postcard.css";
 import { useSelector, useDispatch } from "react-redux";
 import { apiCommentChild } from "../../apis/apiComment";
 import { getAllPosts } from "../../features/post/postAsync";
-import CommentChild from "./CommentChild";
 
-const CommentUser = (props) => {
+const CommentChild = (props) => {
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth?.data);
   const [openWrite, setOpenWrite] = useState(false);
   const [cmtChild, setCmtChild] = useState("");
   // const { author, content, replies, cmt } = props;
-  const { cmt, postId } = props;
+  const { parentId, child, postId } = props;
+  //   parentId={cmt?._id}
+  //   postId={postId}
+  //   child={item}
   const inforAuth = useSelector((state) => state.auth?.data);
 
   //reply comment
   const handleSendCmtChild = async () => {
     const content = {
-      parentId: cmt?._id,
+      parentId: parentId,
       text: cmtChild,
       postId: postId,
-      reply: cmt?.userId?._id,
+      reply: child?.userId?._id,
     };
-    // console.log(content);
+    //   console.log(content);
 
     await apiCommentChild({
       content,
@@ -37,14 +39,27 @@ const CommentUser = (props) => {
       <div className="comment-user flex items-center gap-1">
         <img
           className="w-10 h-10 rounded-full"
-          src={cmt?.userId?.img}
+          src={child?.userId?.img}
           alt="logo"
         />
         <div className="comemnt-user-title">
           <div className="wrap-comment-user">
-            <p className="text-white">{cmt?.userId?.name}</p>
+            <p className="text-white">{child?.userId?.name}</p>
 
-            <p className="text-white font-normal text-sm">{cmt?.text}</p>
+            {!child?.commentsChild?.length === 0 ? (
+              <p className="text-white font-normal text-sm">{child?.text}</p>
+            ) : (
+              <span className="flex items-center gap-1">
+                <p className="text-white font-bold">{child?.reply?.name}</p>
+                <p className="text-white font-normal text-sm"> {child?.text}</p>
+              </span>
+            )}
+
+            {/* <p className="text-white font-normal text-sm">
+              {!child?.commentsChild?.length === 0
+                ? child?.text
+                : child?.reply?.name + " " + child?.text}
+            </p> */}
           </div>
           <div className="wrap-comment-user-controller flex items-center gap-3">
             <p className="font-normal">5 gio</p>
@@ -58,29 +73,12 @@ const CommentUser = (props) => {
           </div>
         </div>
       </div>
-      {cmt?.commentsChild ? (
-        <ul className="comment-list ml-10 mt-2">
-          {cmt?.commentsChild.map((item, index) => (
-            <li key={index}>
-              <CommentChild
-                // author={reply?.author}
-                // content={reply?.content}
-                // replies={[]}
-                parentId={cmt?._id}
-                postId={postId}
-                child={item}
-              />
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <></>
-      )}
+
       {openWrite ? (
         <div className="flex items-center comment-user-write mt-3 gap-1">
           <img className="w-8 rounded-full" src={auth?.user?.img} alt="" />
           <span className="flex items-center gap-1 comment-user-write-input w-full">
-            <p className="bg-blue-900 text-white px-1">{cmt?.userId?.name}</p>
+            <p className="bg-blue-900 text-white px-1">{child?.userId?.name}</p>
             <input
               value={cmtChild}
               onChange={(e) => setCmtChild(e.target.value)}
@@ -104,4 +102,4 @@ const CommentUser = (props) => {
   );
 };
 
-export default CommentUser;
+export default CommentChild;

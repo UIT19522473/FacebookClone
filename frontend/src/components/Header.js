@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "../styles/header.css";
 import { AiOutlineHome, AiFillHome, AiOutlinePlus } from "react-icons/ai";
 import { RiSlideshow3Line, RiSlideshow3Fill } from "react-icons/ri";
-import { BiGroup, BiSolidGroup, BiSolidUser } from "react-icons/bi";
+import { BiGroup, BiSolidGroup } from "react-icons/bi";
 import { PiGameControllerDuotone, PiGameControllerFill } from "react-icons/pi";
 import { CgMenuGridO } from "react-icons/cg";
 import { BsMessenger } from "react-icons/bs";

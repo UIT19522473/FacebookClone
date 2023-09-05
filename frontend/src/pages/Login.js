@@ -2,26 +2,32 @@ import React, { useEffect, useState } from "react";
 import "../styles/login.css";
 import LogoFacebook from "../images/fb_logo.svg";
 
-import Modal from "../components/Modal";
+// import Modal from "../components/ModalTailWind";
 import Register from "../components/Register";
 import { Link, useNavigate } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
 import { signIn } from "../features/auth/authAsync";
+import ModalCustom from "../components/ModalCustom";
+import { openRegisterForm } from "../features/registerForm/registerFormSlice";
+
+// import ModalTest from "../components/ModalTest";
 // import { apiSignIn } from "../apis/apiAuth";
 
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
-  const [open, setOpen] = useState(false);
+  // const [open, setOpen] = useState(false);
+  const open = useSelector((state) => state.registerForm.open);
 
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
 
   //open form register
   const handleCreateAccount = () => {
-    setOpen(!open);
+    // setOpen(!open);
+    dispatch(openRegisterForm());
   };
 
   //handle login
@@ -43,9 +49,9 @@ const Login = () => {
   return (
     <div className="wrap-login">
       {open ? (
-        <Modal open={open} setOpen={setOpen}>
-          <Register open={open} setOpen={setOpen} />
-        </Modal>
+        <ModalCustom open={open} type="REGISTER">
+          <Register />
+        </ModalCustom>
       ) : (
         <></>
       )}
@@ -91,6 +97,7 @@ const Login = () => {
           </div>
         </div>
       </main>
+      <footer className="footer-login"></footer>
       {/* <footer className="footer-login">
         <div className="footer-contents">
           <ol>

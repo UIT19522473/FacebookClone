@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import IconFacebook from "../../images/facebook.svg";
+// import IconFacebook from "../../images/facebook.svg";
 import "../../styles/home/postcard.css";
 import { BsThreeDots, BsEmojiLaughing } from "react-icons/bs";
 import { IoMdClose } from "react-icons/io";
@@ -30,7 +30,7 @@ const PostCard = (props) => {
   const handleKeyPress = async (event) => {
     if (event.key === "Enter") {
       // Xử lý logic sau khi người dùng nhấn Enter
-      // console.log("Enter pressed! Input value: ", comment);
+
       await apiCommentParent({
         content: {
           text: comment,
@@ -40,32 +40,9 @@ const PostCard = (props) => {
       });
 
       dispatch(getAllPosts({ token: inforAuth?.tokens?.accessToken }));
-
-      // console.log(response);
     }
   };
-  const comments = [
-    {
-      author: "User 1",
-      content: "This is the main comment.",
-      replies: [
-        {
-          author: "User 2",
-          content: "This is a nested reply.",
-          replies: [
-            { author: "User 2", content: "This is a nested reply." },
-            { author: "User 3", content: "Another nested reply." },
-          ],
-        },
-        { author: "User 3", content: "Another nested reply." },
-      ],
-    },
-    {
-      author: "User 4",
-      content: "Another main comment.",
-      replies: [],
-    },
-  ];
+
   return (
     <div className="post-card mt-4">
       <div className="post-card-header flex ">
@@ -136,27 +113,10 @@ const PostCard = (props) => {
             Xem them binh luan
           </button>
           <ul className="post-card-footer-comment mt-2 gap-3 flex flex-col">
-            {/* {comments.map((comment, index) => (
-              <li key={index}>
-                <CommentUser
-                  author={comment.author}
-                  content={comment.content}
-                  replies={comment.replies}
-                />
-              </li>
-            ))} */}
-
             {post?.commentsId ? (
               post?.commentsId.map((item, index) => (
                 <li key={index}>
-                  <CommentUser
-                    cmt={item}
-                    postId={post?._id}
-
-                    //  author={comment.author}
-                    //  content={comment.content}
-                    //  replies={comment.replies}
-                  />
+                  <CommentUser cmt={item} postId={post?._id} />
                 </li>
               ))
             ) : (
