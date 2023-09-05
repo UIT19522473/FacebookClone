@@ -20,30 +20,33 @@ class PostService {
     static getPostByUserId = async ({ userId }) => {
         const listPost = await postModel
             .find()
-            .populate("userId")
-            .populate("commentsId")
-
-        for (let i=0; i< listPost.length; i++) {
-            for (let j=0; j< listPost[i].commentsId.length; j++) {
-                let userId = listPost[i].commentsId[j].userId;
-
-                const getTemp = await findUserById(userId);
-                listPost[i].commentsId[j].userId = getTemp;
-                console.log('Day la user ',listPost[i].commentsId[j].userId);
-
-                for (let k=0; k< listPost[i].commentsId[j].commentsChild.length; k++)
-                {
-                    let temp = listPost[i].commentsId[j].commentsChild[k].reply;
-                    let user1 =  listPost[i].commentsId[j].commentsChild[k].userId;
-                    const getUser1 = await findUserById(user1);
-                    listPost[i].commentsId[j].commentsChild[k].userId = getUser1;
-                    if (temp) {
-                         const user = (await findUserById(temp));
-                         listPost[i].commentsId[j].commentsChild[k].reply = user;
+            .populate({
+                path: 'userId',
+                model: 'User'
+            })
+            .populate({
+                path: 'commentsId',
+                model: 'Comment',
+                populate: [
+                    {
+                        path: 'userId',
+                        model: 'User'
+                    },
+                    {
+                        path: 'commentsChild',
+                        populate: [
+                            {
+                                path: 'userId',
+                                model: 'User'
+                            },
+                            {
+                                path: 'reply',
+                                model: 'User'
+                            }
+                        ]
                     }
-                }
-            }
-        }
+                ]
+            });
 
         return {
             post: listPost,
