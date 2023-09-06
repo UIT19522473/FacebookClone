@@ -72,22 +72,16 @@ const Content = () => {
         </div>
       </section>
       <section className="home-mypost -mt-4">
-        <div className="home-mypost-wrap-title flex gap-3 items-center">
-          <div className="mypost-title-avatar">
-            <img className="w-12 rounded-full" src={auth?.img} alt="logo" />
+        <div className="home-mypost-wrap-title flex gap-2 items-center">
+          <div className="mypost-title-avatar ">
+            <img className="" src={auth?.img} alt="logo" />
           </div>
 
-          {/* <button
-            onClick={() => dispatch(openCreatePost())}
-            className="bg-white"
-          >
-            Test
-          </button> */}
           <button
             onClick={handleOpenCreatePost}
-            className="mypost-title-text w-full"
+            className="mypost-title-text flex-1"
           >
-            <p className="w-full  bg-transparent text-start mypost-btn-thinking">
+            <p className="w-full bg-transparent text-start mypost-btn-thinking">
               {auth?.email}, ban dang nghi gi the?
             </p>
           </button>

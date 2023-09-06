@@ -4,9 +4,10 @@
   bottom: 0;
   right: 20px;
   display: flex;
-  max-width: 60%; /* Điều chỉnh chiều rộng tối đa */
+  max-width: 80%; /* Điều chỉnh chiều rộng tối đa */
   gap: 12px;
   z-index: 999;
+  /* background-color: red; */
 }
 .column-chat {
   display: flex;

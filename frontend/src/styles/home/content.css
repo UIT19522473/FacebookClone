@@ -14,6 +14,13 @@
   padding-bottom: 12px;
 }
 
+.mypost-title-avatar img {
+  border-radius: 50%;
+  width: 40px; /* Điều chỉnh kích thước theo mong muốn */
+  height: 40px; /* Điều chỉnh kích thước theo mong muốn */
+  object-fit: cover; /* Giữ nguyên tỷ lệ khung hình */
+}
+
 .mypost-title-text {
   background-color: var(--bg-secondary);
   padding: 8px 12px;

@@ -6,7 +6,7 @@ const StoryCard = () => {
   return (
     <div className="wrap-story-card">
       <div className="story-card ">
-        <div className="image-story-wrapper rounded-t-xl h-full">
+        <div className="image-story-wrapper rounded-full h-full">
           <img
             className="w-full h-full img-story"
             src="https://taimienphi.vn/tmp/cf/aut/anh-gai-xinh-1.jpg"
