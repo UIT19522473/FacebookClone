@@ -1,0 +1,66 @@
+.wrap-profile-controller {
+  background-color: var(--bg-header);
+}
+
+/* navigation */
+
+.wrap-profile-navigation {
+  background-color: var(--bg-header);
+  border-top: 1px solid rgba(128, 128, 128, 0.5);
+}
+
+.wrap-profile-navigation-btn {
+  padding: 20px 16px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  border-bottom: 4px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.wrap-profile-navigation-btn--checked {
+  border-bottom: 4px solid var(--blue-facebook);
+  color: var(--blue-facebook);
+}
+
+.wrap-profile-content {
+  background-color: var(--bg-header);
+  margin-top: 12px;
+  border-radius: 12px;
+  padding: 12px;
+}
+
+/* navigation ends here */
+
+/* navigation friends */
+.wrap-profile-friends-navigation {
+  background-color: var(--bg-header);
+}
+
+.wrap-friend-card {
+  border: 1px solid rgb(54, 54, 54);
+  padding: 8px;
+  border-radius: 12px;
+}
+
+.friend-card-button {
+  width: 120px;
+  padding: 8px;
+  border-radius: 12px;
+  background-color: gray;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.friend-card-button:hover {
+  background-color: rgb(160, 160, 160);
+}
+
+.friend-card-button--confirm {
+  background-color: var(--blue-facebook);
+}
+
+.friend-card-button--confirm:hover {
+  background-color: #056dce;
+}
+
+/* navigation friends ends here */

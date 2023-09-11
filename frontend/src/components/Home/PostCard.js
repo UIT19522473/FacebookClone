@@ -18,13 +18,41 @@ import { useSelector, useDispatch } from "react-redux";
 import { apiCommentParent } from "../../apis/apiComment";
 import { getAllPosts } from "../../features/post/postAsync";
 
+//change time
+import moment from "moment";
+
 const PostCard = (props) => {
   const dispatch = useDispatch();
   const { post } = props;
   const auth = useSelector((state) => state.auth?.data?.user);
   const inforAuth = useSelector((state) => state.auth?.data);
 
-  // console.log(token);
+  //convert time
+  const now = moment();
+  const targetTime = moment(post?.createdAt);
+  const duration = moment.duration(now.diff(targetTime));
+
+  // Định dạng khoảng thời gian
+  const days = Math.floor(duration.asDays());
+  const hours = duration.hours();
+  const minutes = duration.minutes();
+  const seconds = duration.seconds();
+
+  let formattedDuration = "";
+
+  // Kiểm tra và hiển thị số ngày nếu có
+  if (days > 0) {
+    formattedDuration = `${days} ngày`;
+  } else if (hours > 0) {
+    formattedDuration = `${hours} giờ`;
+  } else if (minutes > 0) {
+    formattedDuration = `${minutes} phút`;
+  } else {
+    formattedDuration = `${seconds} giây`;
+  }
+
+  // --------------
+
   const [comment, setComment] = useState("");
 
   const handleKeyPress = async (event) => {
@@ -48,14 +76,14 @@ const PostCard = (props) => {
       <div className="post-card-header flex ">
         <div className="post-card-header-avatar">
           <img
-            className="w-12 rounded-full"
+            className="w-12 h-12 rounded-full"
             src={post?.userId?.img}
             alt="logo"
           />
         </div>
         <div className="post-card-header-info ml-2">
-          <p>{post?.userId?.email}</p>
-          <p>30 phut</p>
+          <p className="text-xl">{post?.userId?.name}</p>
+          <p className="text-xs text-gray-400">{formattedDuration}</p>
         </div>
         <div className="post-card-header-control ml-auto flex items-center gap-3">
           <div className="header-control-more">

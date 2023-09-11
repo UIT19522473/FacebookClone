@@ -11,14 +11,61 @@
 }
 .column-chat {
   display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding-bottom: 12px;
+  flex-direction: column-reverse;
+  /* justify-content: flex-end; */
+
+  gap: 4px;
+  padding-bottom: 18px;
+}
+
+.chat-box-hidden {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.chat-box-hidden:hover {
+  transform: translateY(-2px);
+}
+
+.chat-box-hidden:hover .chat-box-hidden-btnclose {
+  display: flex;
+}
+
+.chat-box-hidden-btnclose {
+  position: absolute;
+  top: 0px;
+  right: 0;
+  font-weight: 500;
+  height: 18px;
+  width: 18px;
+  background-color: var(--bg-secondary);
+  border-radius: 100%;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+.chat-box-hidden-btnclose:hover {
+  background-color: rgb(77, 77, 77);
 }
 
 .row-chat {
   display: flex;
   gap: 8px;
+}
+
+.chat-btn-creategroup {
+  color: var(--color-text-secondary);
+  background-color: var(--bg-secondary);
+  width: 46px;
+  height: 46px;
+  border-radius: 100%;
+  transition: background-color 0.2s ease;
+}
+
+.chat-btn-creategroup:hover {
+  background-color: rgb(85, 85, 85);
 }
 
 /* Thiết lập styles cho từng hộp chat */
@@ -163,3 +210,51 @@
 }
 
 /* message part ends here */
+
+/* create group chat here */
+
+/* .ant-select-selection-search-input {
+  height: 60px !important;
+  line-height: inherit !important;
+  padding: 0 !important;
+} */
+
+.wrap-create-group-chat {
+  background-color: var(--bg-header);
+  color: var(--color-text-primary);
+  width: 80%;
+  padding: 8px;
+}
+
+.create-group-chat-btnfooter {
+  padding: 4px 8px;
+  width: 80px;
+  border-radius: 12px;
+  background-color: var(--blue-facebook);
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.create-group-chat-btnfooter:hover {
+  background-color: #086ac5;
+}
+
+.create-group-chat-btnfooter--cancel {
+  background-color: var(--bg-secondary);
+}
+
+.create-group-chat-btnfooter--cancel:hover {
+  background-color: rgb(80, 80, 80);
+}
+
+.ant-dropdown-menu {
+  background-color: var(--bg-header) !important;
+}
+.ant-dropdown-menu-item {
+  color: var(--color-text-primary) !important;
+}
+.ant-dropdown-menu-item:hover {
+  background-color: rgb(64, 64, 64) !important;
+}
+
+/* create group chat ends here */

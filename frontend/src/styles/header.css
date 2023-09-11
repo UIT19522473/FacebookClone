@@ -10,7 +10,7 @@
 .header-search {
   background-color: var(--bg-secondary);
   height: fit-content;
-  padding: 10px;
+  padding: 0px 10px;
 }
 
 .header-search-icon span {
@@ -57,3 +57,115 @@
   color: var(--color-text-primary);
   cursor: pointer;
 }
+
+.ant-select-selector {
+  background-color: transparent !important;
+  border: none !important;
+  color: var(--color-text-secondary) !important;
+  outline: none !important;
+}
+
+.ant-select-selector .ant-select-selection-placeholder {
+  color: var(--color-text-secondary) !important; /* Thay đổi màu chữ tại đây */
+}
+
+.ant-select-selection-search-input {
+  outline: none !important;
+  border: none !important;
+}
+
+/* Các thuộc tính CSS khác bạn muốn áp dụng cho mỗi mục trong danh sách */
+/* .ant-select-dropdown-menu-item {
+  background-color: transparent !important;
+} */
+
+.ant-select-item-option-content {
+  color: var(--color-text-secondary); /* Đặt màu chữ theo ý muốn */
+}
+
+.ant-select-arrow,
+.ant-select-search__field__icon {
+  display: none !important;
+}
+
+/* menu notify */
+
+.menu-notify {
+  width: 360px;
+  background-color: var(--bg-header);
+  max-height: 90vh;
+  min-height: 300px;
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
+  padding: 12px;
+  display: none;
+}
+
+.menu-notify--display {
+  display: block;
+}
+
+.item-notify-invite {
+  cursor: pointer;
+  margin-right: 4px;
+  border-radius: 8px;
+
+  padding: 8px 0;
+}
+
+.item-notify-invite:hover {
+  background-color: var(--bg-secondary);
+}
+
+.item-notify-invite-controller-btn {
+  width: 100px;
+  background-color: var(--blue-facebook);
+  text-align: center;
+  padding: 4px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.item-notify-invite-controller-btn--remove {
+  background-color: var(--bg-secondary);
+}
+
+.menu-notify-invite-more-btn,
+.item-notify-invite-time {
+  color: var(--blue-facebook);
+}
+
+.menu-notify-invite-item-wrap {
+  max-height: 300px;
+  overflow-y: scroll;
+}
+
+/* Ẩn thanh cuộn mặc định trên các trình duyệt WebKit */
+.menu-notify-invite-item-wrap::-webkit-scrollbar {
+  width: 12px;
+  height: 50px;
+  background-color: transparent;
+
+  /* border-radius: 24px; */
+}
+
+/* Tùy chỉnh màu sắc của thanh cuộn */
+.menu-notify-invite-item-wrap::-webkit-scrollbar-thumb {
+  background-color: gray;
+  border-radius: 24px;
+}
+
+/* Tùy chỉnh màu nền của khu vực thanh cuộn */
+.menu-notify-invite-item-wrap::-webkit-scrollbar-track {
+  background-color: var(--bg-secondary);
+}
+
+/* Tùy chỉnh màu sắc khi di chuột vào thanh cuộn */
+.menu-notify-invite-item-wrap::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-text-secondary);
+  cursor: pointer;
+}
+
+/* menu notify ends here */

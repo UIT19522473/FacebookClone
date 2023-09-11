@@ -52,6 +52,7 @@ const Content = () => {
       ) : (
         <></>
       )} */}
+
       {openPost ? (
         <ModalCustom type="CREATEPOST" open={openPost}>
           <CreatePost />
@@ -82,7 +83,7 @@ const Content = () => {
             className="mypost-title-text flex-1"
           >
             <p className="w-full bg-transparent text-start mypost-btn-thinking">
-              {auth?.email}, ban dang nghi gi the?
+              {auth?.name}, ban dang nghi gi the?
             </p>
           </button>
         </div>

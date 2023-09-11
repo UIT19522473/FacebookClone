@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
@@ -11,9 +11,25 @@ import Login from "./pages/Login";
 
 import Test from "./pages/Test";
 import { useSelector } from "react-redux";
+import Profile from "./pages/Profile";
+
+import io from "socket.io-client";
+
+const socket = io(process.env.REACT_APP_URL_SERVER);
 
 const App = () => {
   const auth = useSelector((state) => state?.auth?.data);
+
+  useEffect(() => {
+    console.log("hello");
+    socket.on("connect", () => {
+      console.log("Connected to server:", socket.id);
+    });
+
+    socket.on("disconnect", () => {
+      console.log("Disconnected from server:", socket.id);
+    });
+  }, []);
   return (
     <BrowserRouter>
       <Routes>
@@ -26,6 +42,7 @@ const App = () => {
             <Route path="watch" element={<Watch />} />
             <Route path="group" element={<Group />} />
             <Route path="game" element={<Game />} />
+            <Route path="profile" element={<Profile />} />
             <Route path="test" element={<Test />} />
             <Route path="*" element={<NotFound />} />
           </Route>

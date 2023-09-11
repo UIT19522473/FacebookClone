@@ -10,6 +10,7 @@ import { closeCreatePost } from "../features/createPost/createPostSlice";
 import { closeRegisterForm } from "../features/registerForm/registerFormSlice";
 
 import "../styles/modal.css";
+import { closeCreateGroupChat } from "../features/createGroupChat/createGroupChatSlice";
 
 // const style = {
 //   position: "absolute",
@@ -26,46 +27,19 @@ import "../styles/modal.css";
 export default function ModalCustom(props) {
   const { type, open } = props;
   const dispatch = useDispatch();
-  //   let open = useSelector((state) => state.createPost.open);
-
-  //   const [open, setOpen] = React.useState(false);
-  //   const handleOpen = () => setOpen(true);
-  //   const handleClose = () => setOpen(false);
-  //   const handleOpen = () => {
-  //     dispatch(openCreatePost());
-  //   };
-
-  // const handleClose = () => {
-  //   if (type === "REGISTER") {
-  //     dispatch(closeRegisterForm());
-  //   } else if (type === "CREATEPOST") {
-  //     dispatch(closeCreatePost());
-  //   }
-  // };
 
   const handleCancel = () => {
     if (type === "REGISTER") {
       dispatch(closeRegisterForm());
     } else if (type === "CREATEPOST") {
       dispatch(closeCreatePost());
+    } else if (type === "CREATEGROUPCHAT") {
+      dispatch(closeCreateGroupChat());
     }
   };
 
   return (
     <div>
-      {/* <Modal
-        open={open}
-        onClose={handleClose}
-        // style={{ backgroundColor: "red" }}
-        // aria-labelledby="modal-modal-title"
-        // aria-describedby="modal-modal-description"
-        // className="bg-black"
-      >
-        <div className="absolute top-1/2 left-1/2 w-[580px] translate-x-[-50%] translate-y-[-50%]">
-          {props.children}
-        </div>
-      </Modal> */}
-
       <Modal
         // title="Basic Modal"
         open={open}
@@ -73,7 +47,6 @@ export default function ModalCustom(props) {
         onCancel={handleCancel}
         footer={null}
         closable={false} // Tắt nút đóng góc trên cùng bên phải
-        // style={{ background: "lightblue", backgroundColor: "lightblue" }}
       >
         <div className="items-center justify-center flex">{props.children}</div>
       </Modal>

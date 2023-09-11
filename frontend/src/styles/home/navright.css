@@ -66,3 +66,13 @@
   background-color: var(--color-text-secondary);
   cursor: pointer;
 }
+
+.wrap-item-nav-right {
+  transition: all 0.2s ease;
+  padding: 8px;
+  cursor: pointer;
+  border-radius: 16px;
+}
+.wrap-item-nav-right:hover {
+  background-color: var(--bg-secondary);
+}
