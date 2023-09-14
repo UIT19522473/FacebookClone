@@ -46,7 +46,7 @@ const WrapChat = () => {
         <button
           onClick={handleCreateGroupChat}
           title="Tạo nhóm chat"
-          className="chat-btn-creategroup mt-2 flex items-center justify-center"
+          className="chat-btn-creategroup mt-2 flex items-center justify-center mx-auto"
         >
           <MdGroupAdd size={24} />
         </button>

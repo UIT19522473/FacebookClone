@@ -258,3 +258,9 @@
 }
 
 /* create group chat ends here */
+
+.wrap-modal-member-groupchat {
+  background-color: var(--bg-header);
+  border-radius: 12px;
+}
+/* modal group chat member */

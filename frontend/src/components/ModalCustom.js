@@ -10,7 +10,10 @@ import { closeCreatePost } from "../features/createPost/createPostSlice";
 import { closeRegisterForm } from "../features/registerForm/registerFormSlice";
 
 import "../styles/modal.css";
-import { closeCreateGroupChat } from "../features/createGroupChat/createGroupChatSlice";
+import {
+  closeCreateGroupChat,
+  closeGroupChatMembers,
+} from "../features/createGroupChat/createGroupChatSlice";
 
 // const style = {
 //   position: "absolute",
@@ -35,6 +38,8 @@ export default function ModalCustom(props) {
       dispatch(closeCreatePost());
     } else if (type === "CREATEGROUPCHAT") {
       dispatch(closeCreateGroupChat());
+    } else if (type === "OPENMEMBERSCHAT") {
+      dispatch(closeGroupChatMembers());
     }
   };
 

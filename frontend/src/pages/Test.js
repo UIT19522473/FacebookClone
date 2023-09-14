@@ -1,5 +1,9 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import io from "socket.io-client";
+
+const socket = io(process.env.REACT_APP_URL_SERVER);
 // import { useSelector } from "react-redux";
 
 // const Con = (props) => {
@@ -27,6 +31,7 @@ const Test = () => {
   //   setIdAuth(data.idAuth);
   //   setName(data.name);
   // };
+  const auth = useSelector((state) => state.auth?.data?.user);
 
   const [fileUrl, setFileUrl] = useState("");
 
@@ -67,10 +72,60 @@ const Test = () => {
     }
   };
 
+  const [idRoom, setIdRoom] = useState("");
+  const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState([]);
+
+  useEffect(() => {
+    socket.emit("joinRoom", {
+      idRoom: `chatPrivate_${auth?._id}`,
+    });
+    socket.on("messageReceived", (data) => {
+      setMessages([...messages, data?.message]);
+    });
+  }, [auth?._id, messages]);
+
+  const sendMessage = () => {
+    socket.emit("chatMessage", {
+      message: message,
+      idRoom: `chatPrivate_${idRoom}`,
+    });
+    setMessage("");
+  };
+
   return (
     <div className="text-white">
       <input onChange={handleImageChange} type="file" />
       <button onClick={handleUpload}>upload</button>
+
+      <h1>chat....</h1>
+      <div className="ml-96">
+        <h2>Chat App</h2>
+        <div className="chat-box">
+          {messages.map((msg, index) => (
+            <div key={index} className="message text-white">
+              {msg}
+            </div>
+          ))}
+        </div>
+        <div className="input-box">
+          <input
+            className="text-black mb-2"
+            type="text"
+            placeholder="number room"
+            value={idRoom}
+            onChange={(e) => setIdRoom(e.target.value)}
+          />
+          <input
+            className="text-black"
+            type="text"
+            placeholder="Nhập tin nhắn"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+          />
+          <button onClick={sendMessage}>Gửi</button>
+        </div>
+      </div>
     </div>
   );
 };

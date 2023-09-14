@@ -2,12 +2,7 @@ import React, { useRef, useState } from "react";
 import "../../styles/chat.css";
 
 import { MdClose } from "react-icons/md";
-// import { FaVideo } from "react-icons/fa";
-// // import { GrSubtract } from "react-icons/gr";
-// import { BsFileEarmarkImage } from "react-icons/bs";
-// import { AiFillLike } from "react-icons/ai";
-// import MessageReceive from "./MessageReceive";
-// import MessageSend from "./MessageSend";
+
 import { Select } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { closeCreateGroupChat } from "../../features/createGroupChat/createGroupChatSlice";

@@ -18,8 +18,8 @@ const InviteAddFriend = () => {
       <div className="item-notify-invite-content flex-1 mr-4">
         <span className="item-notify-invite-desc ">
           <p className="text-base">
-            <span class="font-semibold">Tuân Nguyễn</span> đã gửi cho bạn lời
-            mời kết bạn
+            <span className="font-semibold">Tuân Nguyễn</span> đã gửi cho bạn
+            lời mời kết bạn
           </p>
         </span>
         <p className="item-notify-invite-time text-sm mt-1">1 ngày trước</p>

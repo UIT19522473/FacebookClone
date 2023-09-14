@@ -21,7 +21,7 @@ const App = () => {
   const auth = useSelector((state) => state?.auth?.data);
 
   useEffect(() => {
-    console.log("hello");
+    // console.log("hello");
     socket.on("connect", () => {
       console.log("Connected to server:", socket.id);
     });

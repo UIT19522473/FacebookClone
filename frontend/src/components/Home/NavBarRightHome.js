@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 import React, { useEffect, useState } from "react";
 import "../../styles/home/navright.css";
 
@@ -38,7 +39,11 @@ const NavBarRightHome = () => {
   // fake group chat
   const groupChat = {
     _id: 123,
-    members: [],
+    members: [
+      { _id: 123, name: "tuan", img: "demo" },
+      { _id: 124, name: "duyen", img: "demo" },
+      { _id: 125, name: "duy", img: "demo" },
+    ],
     message: [],
     name: "Group Test",
     img: "https://phucnvh.s3.ap-southeast-1.amazonaws.com/image_group.jpeg",
