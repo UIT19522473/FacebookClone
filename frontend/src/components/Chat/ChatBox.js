@@ -74,18 +74,6 @@ const ChatBox = (props) => {
         .catch((error) => console.log(error));
     };
     fetchHistoryChat();
-
-    // socket.on(`messageReceived`, (data) => {
-    //   const { userSend, userReceive, message } = data;
-
-    //   dispatch(
-    //     addToAllMess({
-    //       message: message,
-    //       userSend: userSend,
-    //       userReceive: userReceive,
-    //     })
-    //   );
-    // });
   }, [dispatch, idCommon]);
 
   // const [mess, setMess] = useState("");

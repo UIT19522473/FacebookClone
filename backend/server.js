@@ -9,6 +9,7 @@ const socketIo = require("socket.io")(server, {
     origin: "*",
   },
 });
+const chatMessageHandler = require("./src/socket/chatPrivateMess");
 
 socketIo.on("connection", (socket) => {
   // console.log("User connected:", socket.id);
@@ -29,6 +30,8 @@ socketIo.on("connection", (socket) => {
       message: message,
     });
   });
+  // Sử dụng phần xử lý chatMessage từ file riêng
+  // chatMessageHandler(socket);
 
   socket.on("disconnect", () => {
     console.log("User disconnected:", socket.id);
