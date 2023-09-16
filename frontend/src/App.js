@@ -14,6 +14,7 @@ import { useSelector } from "react-redux";
 import Profile from "./pages/Profile";
 
 import io from "socket.io-client";
+import TestCall from "./pages/TestCall";
 
 const socket = io(process.env.REACT_APP_URL_SERVER);
 
@@ -44,7 +45,9 @@ const App = () => {
             <Route path="game" element={<Game />} />
             <Route path="profile" element={<Profile />} />
             <Route path="test" element={<Test />} />
+            <Route path="test-call" element={<TestCall />} />
             <Route path="*" element={<NotFound />} />
+
           </Route>
         ) : (
           <Route path="/">
