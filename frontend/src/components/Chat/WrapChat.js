@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "../../styles/chat.css";
 // import IconFacebook from "../../images/facebook.svg";
-import ChatBox from "./ChatBox";
+
 // import { IoIosCreate } from "react-icons/io";
 import { MdGroupAdd } from "react-icons/md";
 import { useSelector, useDispatch } from "react-redux";
@@ -13,7 +13,17 @@ import ModalCustom from "../ModalCustom";
 import CreateGroupChatBox from "./CreateGroupChat";
 import { openCreateGroupChat } from "../../features/createGroupChat/createGroupChatSlice";
 
+import io from "socket.io-client";
+import {
+  addToAllMess,
+  removeCacheMess,
+} from "../../features/chatPrivate/chatPriaveSlice";
+import ChatBox from "./ChatBox";
+
+const socket = io(process.env.REACT_APP_URL_SERVER);
+
 const WrapChat = () => {
+  const auth = useSelector((state) => state.auth?.data?.user);
   const dispatch = useDispatch();
   const listChat = useSelector((state) => state.listChat);
   const openModal = useSelector((state) => state.groupChat.open);
@@ -22,6 +32,7 @@ const WrapChat = () => {
     e.preventDefault();
     e.stopPropagation(); // Ngăn chặn sự kiện lan truyền lên cấp cao hơn
     dispatch(addDisplay(user));
+    dispatch(removeCacheMess({ idSend: auth?._id, idReceive: user?._id }));
   };
 
   const handleCloseHiddenMess = (user, e) => {
@@ -34,6 +45,25 @@ const WrapChat = () => {
   const handleCreateGroupChat = () => {
     dispatch(openCreateGroupChat());
   };
+
+  //chat socket
+  useEffect(() => {
+    socket.emit("joinRoom", {
+      idRoom: `chatPrivate_${auth?._id}`,
+    });
+
+    socket.on(`messageReceived`, (data) => {
+      const { userSend, userReceive, message } = data;
+
+      dispatch(
+        addToAllMess({
+          message: message,
+          userSend: userSend,
+          userReceive: userReceive,
+        })
+      );
+    });
+  }, [auth?._id, dispatch]);
 
   return (
     <div className="chat-container">

@@ -19,19 +19,79 @@ import ModalCustom from "../ModalCustom";
 import { openGroupChatMembers } from "../../features/createGroupChat/createGroupChatSlice";
 import MdMemberGroupChat from "./MdMemberGroupChat";
 
-import io from "socket.io-client";
+import {
+  addToAllMess,
+  removeCacheMess,
+} from "../../features/chatPrivate/chatPriaveSlice";
+import {
+  apiCreateChatPrivate,
+  apiGetChatPrivate,
+} from "../../apis/apiChatPrivate";
 
+// import { useQuery, QueryClientProvider, QueryClient } from "react-query";
+
+import io from "socket.io-client";
 const socket = io(process.env.REACT_APP_URL_SERVER);
 
+// const queryClient = new QueryClient();
+// const fetchData = async () => {
+//   const response = await apiGetChatPrivate({
+//     idCommon: "64f0a3ca9ecb1088c3325624_64fab61c763da5135dcc9a68",
+//   });
+//   const data = await response?.data?.metadatas?.historyChat;
+//   return data;
+// };
 const ChatBox = (props) => {
   const auth = useSelector((state) => state.auth?.data?.user);
   const dispatch = useDispatch();
   const openModal = useSelector((state) => state.groupChat.openMembers.open);
   const { user } = props;
+  const chatPrivate = useSelector((state) => state.chatPrivate.allMess);
+
+  // const { data, isLoading, isError } = useQuery("myData", fetchData);
+  useEffect(() => {
+    dispatch(removeCacheMess({ idSend: auth?._id, idReceive: user?._id }));
+  }, []);
+
+  const idCommon = user.members
+    ? "idGroupTest"
+    : user?._id.localeCompare(auth?._id) < 0
+    ? `${user?._id}_${auth?._id}`
+    : `${auth?._id}_${user?._id}`;
+
+  const [isLoading, setIsLoading] = useState(true);
+  const [historyChat, setHistoryChat] = useState([]);
+  useEffect(() => {
+    const fetchHistoryChat = () => {
+      apiGetChatPrivate({ idCommon })
+        .then((response) => {
+          return response?.data?.metadatas?.historyChat;
+        })
+        .then((data) => {
+          setHistoryChat(data);
+          setIsLoading(false);
+        })
+        .catch((error) => console.log(error));
+    };
+    fetchHistoryChat();
+
+    // socket.on(`messageReceived`, (data) => {
+    //   const { userSend, userReceive, message } = data;
+
+    //   dispatch(
+    //     addToAllMess({
+    //       message: message,
+    //       userSend: userSend,
+    //       userReceive: userReceive,
+    //     })
+    //   );
+    // });
+  }, [dispatch, idCommon]);
 
   // const [mess, setMess] = useState("");
   const handleCloseMess = () => {
     dispatch(removeDisplay(user));
+    dispatch(removeCacheMess({ idSend: auth?._id, idReceive: user?._id }));
     // console.log("hello");
   };
 
@@ -51,9 +111,9 @@ const ChatBox = (props) => {
   //xu li nhan tin
   // const [idRoom, setIdRoom] = useState("");
   const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState([]);
+  // const [messages, setMessages] = useState([]);
 
-  const handleKeyPressSendMess = (e) => {
+  const handleKeyPressSendMess = async (e) => {
     if (e.key === "Enter") {
       // Xử lý khi người dùng nhấn Enter ở đây
       // console.log(messages);
@@ -63,30 +123,44 @@ const ChatBox = (props) => {
         message: message,
         idRoom: `chatPrivate_${user?._id}`,
       });
+      let messSend = message;
       setMessage("");
-      setMessages([...messages, { data: { message, userSend: auth } }]);
+
+      const userSend = {
+        _id: auth?._id,
+        name: auth?.name,
+        img: auth?.img,
+        email: auth?.email,
+      };
+      const userReceive = {
+        _id: user?._id,
+        name: user?.name,
+        img: user?.img,
+        email: user?.email,
+      };
+
+      dispatch(
+        addToAllMess({
+          message: message,
+          userSend: userSend,
+          userReceive: user,
+        })
+      );
+
+      await apiCreateChatPrivate({
+        idCommon: idCommon,
+        messDetail: {
+          message: messSend,
+          userSend: auth,
+          userReceive: userReceive,
+        },
+      });
+
+      messSend = "";
+
+      // setMessages([...messages, { data: { message, userSend: auth } }]);
     }
   };
-
-  useEffect(() => {
-    socket.emit("joinRoom", {
-      idRoom: `chatPrivate_${auth?._id}`,
-    });
-
-    // socket.on(`messageReceived_${auth?._id}`, (data) => {
-    //   const { userSend, message } = data;
-    //   setMessages([...messages, { data: { message, userSend: userSend } }]);
-    // });
-
-    const idJoined = [user?._id, auth?._id].sort().join("");
-    // console.log(idJoined);
-
-    socket.on(`messageReceived_${idJoined}`, (data) => {
-      const { userSend, message } = data;
-
-      setMessages([...messages, { data: { message, userSend: userSend } }]);
-    });
-  }, [auth?._id, messages, user?._id]);
 
   const dataGroupDropDown = [
     {
@@ -181,6 +255,15 @@ const ChatBox = (props) => {
     dropdowRef.current.click();
   };
 
+  const chatContainerRef = useRef(null);
+  // Mỗi khi messages thay đổi, cuộn xuống dưới
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop =
+        chatContainerRef.current.scrollHeight;
+    }
+  }, [chatPrivate, historyChat]);
+
   return (
     <div className="chat-box">
       {openModal ? (
@@ -232,31 +315,56 @@ const ChatBox = (props) => {
           </button>
         </span>
       </div>
-      <div className="chat-box-body">
-        {/* <MessageSend />
-        <MessageReceive /> */}
-        {messages?.map((item, index) => {
+      <div ref={chatContainerRef} className="chat-box-body">
+        {isLoading ? (
+          <>
+            <p>loading...</p>
+          </>
+        ) : (
+          <>
+            {historyChat?.map((item, index) => {
+              if (
+                item?.userSend?._id === auth?._id &&
+                item?.userReceive?._id === user?._id &&
+                item?.message !== ""
+              ) {
+                return <MessageSend key={index} mess={item?.message} />;
+              } else if (
+                item?.userSend?._id === user?._id &&
+                item?.message !== ""
+              ) {
+                return (
+                  <MessageReceive
+                    key={index}
+                    mess={item?.message}
+                    user={item?.userSend}
+                  />
+                );
+              }
+            })}
+          </>
+        )}
+
+        {chatPrivate?.map((item, index) => {
           if (
-            item?.data?.userSend?._id === auth?._id &&
-            item?.data?.message !== ""
+            item?.userSend?._id === auth?._id &&
+            item?.userReceive?._id === user?._id &&
+            item?.message !== ""
           ) {
-            return <MessageSend key={index} mess={item?.data?.message} />;
+            return <MessageSend key={index} mess={item?.message} />;
           } else if (
-            item?.data?.userSend?._id === user?._id &&
-            item?.data?.message !== ""
-          )
+            item?.userSend?._id === user?._id &&
+            item?.message !== ""
+          ) {
             return (
               <MessageReceive
                 key={index}
-                mess={item?.data?.message}
-                user={item?.data?.userSend}
+                mess={item?.message}
+                user={item?.userSend}
               />
             );
+          }
         })}
-
-        {/* {messages?.map((item, index) => (
-          <p key={index}>{item?.data?.message}</p>
-        ))} */}
       </div>
 
       <div className="chat-box-footer">

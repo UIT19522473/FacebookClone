@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 
+//test chat private
+router.use("/v1/api", require("./chatprivate/index"));
+
 //check permission
 router.use("/v1/api", require("./access/index"));
 router.use("/v1/api", require("./post/index"));
