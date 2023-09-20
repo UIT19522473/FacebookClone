@@ -6,8 +6,11 @@ import ItemUserNavRight from "./ItemUserNavRight";
 import LogoFacebook from "../../images/facebook.svg";
 import { apiGetUsers } from "../../apis/apiSearch";
 import { useSelector } from "react-redux";
+import { getGroupChat } from "../../features/chatGroup/chatGroupAsync";
+import { useDispatch } from "react-redux";
 
 const NavBarRightHome = () => {
+  const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
 
   const [listFriends, setListFriends] = useState([]);
@@ -49,6 +52,28 @@ const NavBarRightHome = () => {
     img: "https://phucnvh.s3.ap-southeast-1.amazonaws.com/image_group.jpeg",
   };
 
+  const acessToken = useSelector(
+    (state) => state.auth?.data?.tokens?.accessToken
+  );
+  useEffect(() => {
+    const fetchGroup = async () => {
+      // const response = await apiGetChatGroup({
+      //   content: auth?._id,
+      //   token: acessToken,
+      // });
+      // console.log("grouppppp", response);
+      await dispatch(
+        getGroupChat({
+          content: auth?.data?.user?._id,
+          token: acessToken,
+        })
+      );
+    };
+    fetchGroup();
+  }, [acessToken, auth?.data?.user?._id, dispatch]);
+
+  const dataChatGroup = useSelector((state) => state.chatGroup);
+
   return (
     <nav className="home-nav-right w-[20%] mr-6">
       <section className="home-nav-right-menu">
@@ -80,7 +105,14 @@ const NavBarRightHome = () => {
       <section className="home-nav-left-link">
         <h3>Cuoc tro chuyen nhom</h3>
         <ul className="home-list-item">
-          <ItemUserNavRight type="group" img={LogoFacebook} group={groupChat} />
+          {dataChatGroup?.data?.map((item, index) => (
+            <ItemUserNavRight
+              key={index}
+              type="group"
+              img={LogoFacebook}
+              group={item}
+            />
+          ))}
         </ul>
         <button className="btn-expand">
           <span className="material-symbols-outlined icon-expand">add</span>

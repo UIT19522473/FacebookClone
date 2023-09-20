@@ -3,7 +3,7 @@ const PostService = require("../services/post.service");
 
 class PostController {
   createPost = async (req, res, next) => {
-    console.log("test...", req.body);
+    // console.log("test...", req.body);
     new CREATED({
       message: "Up post success",
       metadata: await PostService.createPost({
