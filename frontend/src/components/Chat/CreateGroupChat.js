@@ -10,6 +10,9 @@ import { getUsers } from "../../features/search/searchAsync";
 import { apiCreateChatGroup } from "../../apis/apiChatGroup";
 import { getGroupChat } from "../../features/chatGroup/chatGroupAsync";
 
+import io from "socket.io-client";
+const socket = io(process.env.REACT_APP_URL_SERVER);
+
 const CreateGroupChat = () => {
   const dispatch = useDispatch();
   const dataSearch = useSelector((state) => state.search.data);
@@ -87,6 +90,17 @@ const CreateGroupChat = () => {
       })
     );
     // console.log(dataCreatGroupChat);
+
+    socket.emit("joinRoom", {
+      // idRoom: `chatPrivate_${auth?._id}`,
+      idUser: auth?.data?.user?._id,
+    });
+    socket.emit("createGroupChat", {
+      // idRoom: `chatPrivate_${auth?._id}`,
+      idUser: auth?.data?.user?._id,
+      name: nameGroup,
+      members: selectedTags,
+    });
   };
 
   return (

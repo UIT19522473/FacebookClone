@@ -1,4 +1,5 @@
 const chatMessageHandler = require("./Chat");
+const roomHandler = require("./Room");
 
 const socketServer = (server) => {
   const socketIo = require("socket.io")(server, {
@@ -8,8 +9,14 @@ const socketServer = (server) => {
   });
 
   socketIo.on("connection", (socket) => {
+    //room
+    roomHandler.joinRoom(socket);
+
     //sub socket
+
     chatMessageHandler.chatPrivate(socket, socketIo);
+    chatMessageHandler.chatGroup(socket, socketIo);
+    chatMessageHandler.notifyCreateGroupChat(socket, socketIo);
 
     //sub socket ends here....
     socket.on("disconnect", () => {

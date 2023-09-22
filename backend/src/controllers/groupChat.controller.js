@@ -31,21 +31,55 @@ class GroupChatController {
   };
 
   getGroupChat = async (req, res, next) => {
-    // console.log(req.query);
-    // return res.status(200).json(req.query);
     const { idUser } = req.query;
 
-    // console.log(idUser);
     const idUserObject = new mongoose.Types.ObjectId(idUser); // ObjectId của user bạn muốn tìm
-    // res.status(200).json(idUserObject);
 
     try {
       const response = await groupChatModel
         .find({ members: idUserObject })
-        .populate("members", ["_id", "img", "email", "name"]);
+        .populate("members", ["_id", "img", "email", "name"])
+        .select("-historyChat");
+
       res.status(200).json({ metadata: response });
     } catch (error) {
       res.status(500).json({ mess: "error from server" });
+    }
+  };
+
+  pushToHistoryChat = async (req, res, next) => {
+    const { idGroupChat, messDetail } = req.body;
+
+    try {
+      const response = await groupChatModel.findById(idGroupChat);
+      // console.log(response);
+      if (response) {
+        response.historyChat.push(messDetail);
+        await response.save();
+      }
+
+      return res.status(200).json("create chat group success");
+    } catch (error) {
+      res.status(500).json({ mess: "error from server" });
+    }
+  };
+
+  getHistoryChat = async (req, res) => {
+    const { idGroupChat } = req.query;
+
+    // console.log(idCommon);
+    if (!idGroupChat) throw new Error("Missing Input!!!");
+
+    try {
+      // Tìm cuộc trò chuyện theo idCommon
+      const groupChat = await groupChatModel.findById(idGroupChat);
+
+      return res
+        .status(200)
+        .json({ metadatas: groupChat, mess: "get group chat success" });
+    } catch (error) {
+      console.error("get private chat error", error);
+      return res.status(500).json("Internal Server Error");
     }
   };
 }

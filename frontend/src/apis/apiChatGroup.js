@@ -24,7 +24,7 @@ const apiCreateChatGroup = async (data) => {
 
 const apiGetChatGroup = async (data) => {
   const { token, content } = data;
-  console.log({ token, content });
+  // console.log({ token, content });
 
   const response = await axios.get(
     `${process.env.REACT_APP_URL_SERVER_API}/get-group-chat`,
@@ -40,4 +40,34 @@ const apiGetChatGroup = async (data) => {
   return response;
 };
 
-export { apiCreateChatGroup, apiGetChatGroup };
+const apiSendMessChatGroup = async (data) => {
+  const response = await axios.put(
+    `${process.env.REACT_APP_URL_SERVER_API}/push-to-history`,
+    data,
+    { withCredentials: true }
+  );
+  return response;
+};
+
+const apiGetHistoryChatGroup = async (data) => {
+  // console.log(data);
+  const response = await axios.get(
+    `${process.env.REACT_APP_URL_SERVER_API}/get-history-chat`,
+    {
+      params: data,
+      withCredentials: true,
+      headers: {
+        "Content-Type": "multipart/form-data",
+        // Authorization: token,
+      },
+    }
+  );
+  return response;
+};
+
+export {
+  apiCreateChatGroup,
+  apiGetChatGroup,
+  apiSendMessChatGroup,
+  apiGetHistoryChatGroup,
+};

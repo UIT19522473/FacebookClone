@@ -9,6 +9,7 @@ import listChatReduce from "../features/listchat/listchatSlice";
 import createGroupChatReduce from "../features/createGroupChat/createGroupChatSlice";
 import chatPrivateReduce from "../features/chatPrivate/chatPriaveSlice";
 import chatGroupReduce from "../features/chatGroup/chatGroupSlice";
+import notifyReduce from "../features/notify/notifySlice";
 
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"; // Chọn storage engine (local storage, AsyncStorage, ...)
@@ -30,6 +31,7 @@ export const store = configureStore({
     listChat: listChatReduce,
     chatPrivate: chatPrivateReduce,
     chatGroup: chatGroupReduce,
+    notify: notifyReduce,
   },
 });
 

@@ -13,15 +13,17 @@ import ModalCustom from "../ModalCustom";
 import CreateGroupChatBox from "./CreateGroupChat";
 import { openCreateGroupChat } from "../../features/createGroupChat/createGroupChatSlice";
 
-import io from "socket.io-client";
 import {
   addToAllMess,
   removeCacheMess,
 } from "../../features/chatPrivate/chatPriaveSlice";
 import ChatBox from "./ChatBox";
-import { apiGetChatGroup } from "../../apis/apiChatGroup";
-import { getGroupChat } from "../../features/chatGroup/chatGroupAsync";
+import { addToAllMessGroup } from "../../features/chatGroup/chatGroupSlice";
+// import { addNotify } from "../../features/notify/notifySlice";
+// import { apiGetChatGroup } from "../../apis/apiChatGroup";
+// import { getGroupChat } from "../../features/chatGroup/chatGroupAsync";
 
+import io from "socket.io-client";
 const socket = io(process.env.REACT_APP_URL_SERVER);
 
 const WrapChat = () => {
@@ -51,7 +53,8 @@ const WrapChat = () => {
   //chat socket
   useEffect(() => {
     socket.emit("joinRoom", {
-      idRoom: `chatPrivate_${auth?._id}`,
+      // idRoom: `chatPrivate_${auth?._id}`,
+      idUser: auth?._id,
     });
 
     socket.on(`messageReceived`, (data) => {
@@ -65,6 +68,24 @@ const WrapChat = () => {
         })
       );
     });
+
+    socket.on(`messageGroupReceived`, (data) => {
+      const { userSend, idGroupChat, message } = data;
+      dispatch(
+        addToAllMessGroup({
+          message: message,
+          userSend: userSend,
+          idGroupChat: idGroupChat,
+        })
+      );
+    });
+
+    // socket.on("notifyReceived", (data) => {
+    //   const { type, payload } = data;
+    //   console.log("demo o day", { type, payload });
+    //   // console.log("thong bao moi", { type, payload });
+    //   dispatch(addNotify({ type, payload }));
+    // });
   }, [auth?._id, dispatch]);
 
   return (

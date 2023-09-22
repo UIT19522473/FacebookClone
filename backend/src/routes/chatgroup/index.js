@@ -18,4 +18,16 @@ router.get(
   asyncHandler(groupChatController.getGroupChat)
 );
 
+router.put(
+  "/push-to-history",
+  // upload.array("img", 3),
+  asyncHandler(groupChatController.pushToHistoryChat)
+);
+
+router.get(
+  "/get-history-chat",
+  // upload.array("img", 3),
+  asyncHandler(groupChatController.getHistoryChat)
+);
+
 module.exports = router;

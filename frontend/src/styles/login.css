@@ -67,6 +67,23 @@
   font-size: 16px;
 }
 
+.btn-login {
+  transition: all 0.2s ease;
+}
+.btn-login:hover {
+  transform: translateY(-1px);
+}
+.btn-login--google {
+  width: 100%;
+  margin: 5px 0;
+  height: 45px;
+  border: gray 1px solid !important;
+  border-radius: 12px;
+  font-weight: 500 !important;
+  color: #1c1e21 !important;
+  background-color: white !important;
+}
+
 .col-form .form-container input {
   border: 1px solid #dddfe2;
   color: #1d2129;

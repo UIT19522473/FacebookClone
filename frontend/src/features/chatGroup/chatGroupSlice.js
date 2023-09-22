@@ -6,25 +6,24 @@ const initialState = {
   success: false,
   mes: "",
   data: null,
+  allMess: [],
 };
 
-export const authSlice = createSlice({
+export const chatGroupSlice = createSlice({
   name: "groupChat",
   initialState,
   reducers: {
-    // increment: (state) => {
-    //   // Redux Toolkit allows us to write "mutating" logic in reducers. It
-    //   // doesn't actually mutate the state because it uses the Immer library,
-    //   // which detects changes to a "draft state" and produces a brand new
-    //   // immutable state based off those changes
-    //   state.value += 1;
-    // },
-    // decrement: (state) => {
-    //   state.value -= 1;
-    // },
-    // incrementByAmount: (state, action) => {
-    //   state.value += action.payload;
-    // },
+    addToAllMessGroup: (state, action) => {
+      state.allMess = [...state.allMess, action.payload];
+    },
+
+    removeCacheMessGroup: (state, action) => {
+      // Xóa các phần tử có userSend hoặc userReceive có _id
+      const { idGroupChat } = action.payload;
+      state.allMess = state.allMess.filter((message) => {
+        return message.idGroupChat !== idGroupChat;
+      });
+    },
   },
 
   //    Code logic xử lý async action
@@ -56,6 +55,7 @@ export const authSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-// export const { increment, decrement, incrementByAmount } = counterSlice.actions;
+export const { addToAllMessGroup, removeCacheMessGroup } =
+  chatGroupSlice.actions;
 
-export default authSlice.reducer;
+export default chatGroupSlice.reducer;
