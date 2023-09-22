@@ -56,8 +56,8 @@ const ChatBox = (props) => {
   const idCommon = user.members
     ? "idGroupTest"
     : user?._id.localeCompare(auth?._id) < 0
-    ? `${user?._id}_${auth?._id}`
-    : `${auth?._id}_${user?._id}`;
+      ? `${user?._id}_${auth?._id}`
+      : `${auth?._id}_${user?._id}`;
 
   const [isLoading, setIsLoading] = useState(true);
   const [historyChat, setHistoryChat] = useState([]);
@@ -149,7 +149,9 @@ const ChatBox = (props) => {
       // setMessages([...messages, { data: { message, userSend: auth } }]);
     }
   };
-
+  const test = () => {
+    console.log('test');
+  }
   const dataGroupDropDown = [
     {
       label: (
@@ -244,6 +246,7 @@ const ChatBox = (props) => {
   };
 
   const chatContainerRef = useRef(null);
+
   // Mỗi khi messages thay đổi, cuộn xuống dưới
   useEffect(() => {
     if (chatContainerRef.current) {
@@ -286,7 +289,7 @@ const ChatBox = (props) => {
           </div>
         </span>
         <span className="chat-box-controller flex items-center gap-2">
-          <button className="chat-box-btn-controller">
+          <button className="chat-box-btn-controller" onClick={test}>
             <MdCall size={22} />
           </button>
           <button className="chat-box-btn-controller">

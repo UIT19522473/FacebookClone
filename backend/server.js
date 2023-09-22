@@ -33,6 +33,18 @@ socketIo.on("connection", (socket) => {
   // Sử dụng phần xử lý chatMessage từ file riêng
   // chatMessageHandler(socket);
 
+  //callVideo
+  socket.on("callVideo", (data) => {
+    const { userSend, userReceive, call_id, type } = data;
+    //type 0: thông báo cuộc gọi tới người nhận, 1: xác nhận cuộc gọi, 2: từ chối cuộc gọi
+    socket.emit(`${userReceive}`, {
+      userSend,
+      userReceive,
+      call_id,
+      type
+    })
+  })
+
   socket.on("disconnect", () => {
     console.log("User disconnected:", socket.id);
   });

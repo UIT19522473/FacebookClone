@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "../../styles/chat.css";
 // import IconFacebook from "../../images/facebook.svg";
 
@@ -46,11 +46,43 @@ const WrapChat = () => {
     dispatch(openCreateGroupChat());
   };
 
+  //Start Phuc code
+
+  const [show, setShow] = useState(false);
+  const [userSend, setUserSend] = useState("");
+  const [userReceive, setUserReceive] = useState("");
+  const [call_id, setCall_id] = useState("");
+
+  const Accept = () => {
+    socket.emit('callVideo', {})
+  }
+
+  const Reject = () => {
+
+  }
+
+  //End Phuc code
+
   //chat socket
   useEffect(() => {
+    //Start Phuc code 
+
     socket.emit("joinRoom", {
       idRoom: `chatPrivate_${auth?._id}`,
     });
+
+    socket.on(`${auth?._id}`, (data) => {
+      const { userSend, userReceive, call_id, type } = data;
+      setUserSend(userSend);
+      setUserReceive(userReceive);
+      setCall_id(call_id);
+      if (type == 0) {
+        setShow(true);
+      }
+      //End Phuc code
+
+
+    })
 
     socket.on(`messageReceived`, (data) => {
       const { userSend, userReceive, message } = data;
@@ -110,6 +142,11 @@ const WrapChat = () => {
           </div>
         ))}
       </div>
+      {show ?
+        (<div>
+          <button onClick={Accept}>Accept</button>
+          <button onClick={Reject}>Reject</button>
+        </div>) : null}
     </div>
   );
 };
