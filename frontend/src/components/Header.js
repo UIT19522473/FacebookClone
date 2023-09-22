@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../styles/header.css";
 import { AiOutlineHome, AiFillHome, AiOutlinePlus } from "react-icons/ai";
 import { RiSlideshow3Line, RiSlideshow3Fill } from "react-icons/ri";
@@ -15,63 +15,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { Select } from "antd";
 import { getUsers } from "../features/search/searchAsync";
 import { useNavigate } from "react-router-dom";
-// import { apiGetUsers } from "../apis/apiSearch";
-// import axios from "axios";
 
-// const options = [
-//   {
-//     value: "tuan",
-//     label: "tuan",
-//     imageSrc:
-//       "https://images.unsplash.com/photo-1508919801845-fc2ae1bc2a28?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1nfGVufDB8fDB8fHww&w=1000&q=80",
-//   },
-//   {
-//     value: "lucy",
-//     label: "Lucy",
-//   },
-//   {
-//     value: "tom",
-//     label: "Tom",
-//   },
-// ];
-
-// const stateTasksOptions = (dataSearch) =>
-//   dataSearch?.map((item, index) => (
-//     <Select.Option
-//       key={index}
-//       value={item.name}
-//       title={<span>{item.name}</span>}
-//       className="bg-transparent "
-//       // style={{ backgroundColor: "transparent" }}
-//     >
-//       <div className="flex items-center gap-2">
-//         <img
-//           className="w-8 h-8 rounded-full object-cover"
-//           src={item?.img}
-//           alt=""
-//         />
-//         {/* <span className={`${item.id}Label`}>{item.title}</span> -{" "} */}
-//         <span className="">{item.name}</span>
-//       </div>
-//     </Select.Option>
-//   ));
-
-// const customOptionRender = (option) => {
-//   // Tạo nội dung tùy chỉnh cho mỗi mục tìm kiếm ở đây.
-//   return (
-//     <Select.Option className="bg-slate-500 flex">
-//       <div className="flex items-center gap-2">
-//         <img
-//           src={option.imageSrc}
-//           alt={option.label}
-//           // style={{ width: "24px", marginRight: "8px" }}
-//           className="w-8 h-8 rounded-full object-cover"
-//         />
-//         <span>{option.label}</span>
-//       </div>
-//     </Select.Option>
-//   );
-// };
+import io from "socket.io-client";
+import { addNotify } from "../features/notify/notifySlice";
+import { getGroupChat } from "../features/chatGroup/chatGroupAsync";
+const socket = io(process.env.REACT_APP_URL_SERVER);
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -99,6 +47,33 @@ const Header = () => {
       })
     );
   };
+
+  const acessToken = useSelector(
+    (state) => state.auth?.data?.tokens?.accessToken
+  );
+
+  useEffect(() => {
+    socket.emit("joinRoom", {
+      // idRoom: `chatPrivate_${auth?._id}`,
+      idUser: auth?.data?.user?._id,
+    });
+
+    socket.on("notifyReceived", (data) => {
+      const { type, payload } = data;
+      // console.log("demo o day", { type, payload });
+      // console.log("thong bao moi", { type, payload });
+      dispatch(addNotify({ type, payload }));
+      if (type === "CREATE_CHAT_GROUP") {
+        dispatch(
+          getGroupChat({
+            content: auth?.data?.user?._id,
+            token: acessToken,
+          })
+        );
+      }
+    });
+  }, [acessToken, auth?.data?.user?._id, dispatch]);
+
   return (
     <header className="grid grid-cols-12 header">
       <div className="lg:col-span-3 col-span-2 flex gap-1 my-2 items-center">

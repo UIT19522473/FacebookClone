@@ -31,6 +31,11 @@ import {
 // import { useQuery, QueryClientProvider, QueryClient } from "react-query";
 
 import io from "socket.io-client";
+import {
+  apiGetHistoryChatGroup,
+  apiSendMessChatGroup,
+} from "../../apis/apiChatGroup";
+import { removeCacheMessGroup } from "../../features/chatGroup/chatGroupSlice";
 const socket = io(process.env.REACT_APP_URL_SERVER);
 
 // const queryClient = new QueryClient();
@@ -46,12 +51,22 @@ const ChatBox = (props) => {
   const dispatch = useDispatch();
   const openModal = useSelector((state) => state.groupChat.openMembers.open);
   const { user } = props;
-  const chatPrivate = useSelector((state) => state.chatPrivate.allMess);
-
+  const chatRedux = useSelector(
+    user.members
+      ? (state) => state.chatGroup.allMess
+      : (state) => state.chatPrivate.allMess
+  );
+  // const chatGroup = useSelector((state) => state.chatGroup.allMess);
   // const { data, isLoading, isError } = useQuery("myData", fetchData);
   useEffect(() => {
-    dispatch(removeCacheMess({ idSend: auth?._id, idReceive: user?._id }));
+    if (user?.members) {
+      dispatch(removeCacheMessGroup({ idGroupChat: user?._id }));
+    } else {
+      dispatch(removeCacheMess({ idSend: auth?._id, idReceive: user?._id }));
+    }
   }, []);
+
+  // console.log("log test", user);
 
   const idCommon = user.members
     ? "idGroupTest"
@@ -63,18 +78,30 @@ const ChatBox = (props) => {
   const [historyChat, setHistoryChat] = useState([]);
   useEffect(() => {
     const fetchHistoryChat = () => {
-      apiGetChatPrivate({ idCommon })
-        .then((response) => {
-          return response?.data?.metadatas?.historyChat;
-        })
-        .then((data) => {
-          setHistoryChat(data);
-          setIsLoading(false);
-        })
-        .catch((error) => console.log(error));
+      if (!user.members) {
+        apiGetChatPrivate({ idCommon })
+          .then((response) => {
+            return response?.data?.metadatas?.historyChat;
+          })
+          .then((data) => {
+            setHistoryChat(data);
+            setIsLoading(false);
+          })
+          .catch((error) => console.log(error));
+      } else {
+        apiGetHistoryChatGroup({ idGroupChat: user?._id })
+          .then((response) => {
+            return response?.data?.metadatas?.historyChat;
+          })
+          .then((data) => {
+            setHistoryChat(data);
+            setIsLoading(false);
+          })
+          .catch((error) => console.log(error));
+      }
     };
     fetchHistoryChat();
-  }, [dispatch, idCommon]);
+  }, [dispatch, idCommon, user]);
 
   // const [mess, setMess] = useState("");
   const handleCloseMess = () => {
@@ -105,48 +132,75 @@ const ChatBox = (props) => {
     if (e.key === "Enter") {
       // Xử lý khi người dùng nhấn Enter ở đây
       // console.log(messages);
-      socket.emit("chatMessage", {
-        userSend: auth,
-        userReceive: user,
-        message: message,
-        idRoom: `chatPrivate_${user?._id}`,
-      });
-      let messSend = message;
-      setMessage("");
-
-      const userSend = {
-        _id: auth?._id,
-        name: auth?.name,
-        img: auth?.img,
-        email: auth?.email,
-      };
-      const userReceive = {
-        _id: user?._id,
-        name: user?.name,
-        img: user?.img,
-        email: user?.email,
-      };
-
-      dispatch(
-        addToAllMess({
-          message: message,
-          userSend: userSend,
-          userReceive: user,
-        })
-      );
-
-      await apiCreateChatPrivate({
-        idCommon: idCommon,
-        messDetail: {
-          message: messSend,
+      // xu li tin nhan nhom va private
+      if (!user.members) {
+        socket.emit("chatMessage", {
           userSend: auth,
-          userReceive: userReceive,
-        },
-      });
+          userReceive: user,
+          message: message,
+          idRoom: `chatPrivate_${user?._id}`,
+        });
+        let messSend = message;
+        setMessage("");
 
-      messSend = "";
+        const userSend = {
+          _id: auth?._id,
+          name: auth?.name,
+          img: auth?.img,
+          email: auth?.email,
+        };
+        const userReceive = {
+          _id: user?._id,
+          name: user?.name,
+          img: user?.img,
+          email: user?.email,
+        };
 
-      // setMessages([...messages, { data: { message, userSend: auth } }]);
+        dispatch(
+          addToAllMess({
+            message: message,
+            userSend: userSend,
+            userReceive: user,
+          })
+        );
+
+        await apiCreateChatPrivate({
+          idCommon: idCommon,
+          messDetail: {
+            message: messSend,
+            userSend: auth,
+            userReceive: userReceive,
+          },
+        });
+
+        messSend = "";
+      } else {
+        // { userSend, idGroupChat, members, message }
+        socket.emit("chatGroupMessage", {
+          userSend: auth,
+          idGroupChat: user?._id,
+          members: user?.members,
+          message: message,
+        });
+        let messSend = message;
+        setMessage("");
+
+        const userSend = {
+          _id: auth?._id,
+          name: auth?.name,
+          img: auth?.img,
+          email: auth?.email,
+        };
+
+        await apiSendMessChatGroup({
+          idGroupChat: user?._id,
+          messDetail: {
+            message: messSend,
+            userSend: userSend,
+            idGroupChat: user?._id,
+          },
+        });
+      }
     }
   };
   const test = () => {
@@ -222,22 +276,6 @@ const ChatBox = (props) => {
       ),
       key: "2",
     },
-    // {
-    //   label: (
-    //     <button onClick={() => handleClickItem(3)} className="p-2">
-    //       Thêm thành viên
-    //     </button>
-    //   ),
-    //   key: "3",
-    // },
-    // {
-    //   label: (
-    //     <button onClick={() => handleClickItem(4)} className="p-2">
-    //       Rời nhóm
-    //     </button>
-    //   ),
-    //   key: "4",
-    // },
   ];
 
   const dropdowRef = useRef(null);
@@ -253,7 +291,7 @@ const ChatBox = (props) => {
       chatContainerRef.current.scrollTop =
         chatContainerRef.current.scrollHeight;
     }
-  }, [chatPrivate, historyChat]);
+  }, [chatRedux, historyChat]);
 
   return (
     <div className="chat-box">
@@ -314,46 +352,90 @@ const ChatBox = (props) => {
         ) : (
           <>
             {historyChat?.map((item, index) => {
-              if (
-                item?.userSend?._id === auth?._id &&
-                item?.userReceive?._id === user?._id &&
-                item?.message !== ""
-              ) {
-                return <MessageSend key={index} mess={item?.message} />;
-              } else if (
-                item?.userSend?._id === user?._id &&
-                item?.message !== ""
-              ) {
-                return (
-                  <MessageReceive
-                    key={index}
-                    mess={item?.message}
-                    user={item?.userSend}
-                  />
-                );
+              if (!item.idGroupChat) {
+                if (
+                  item?.userSend?._id === auth?._id &&
+                  item?.userReceive?._id === user?._id &&
+                  item?.message !== ""
+                ) {
+                  return <MessageSend key={index} mess={item?.message} />;
+                } else if (
+                  item?.userSend?._id === user?._id &&
+                  item?.message !== ""
+                ) {
+                  return (
+                    <MessageReceive
+                      key={index}
+                      mess={item?.message}
+                      user={item?.userSend}
+                    />
+                  );
+                }
+              } else {
+                if (
+                  item?.userSend?._id === auth?._id &&
+                  item?.idGroupChat === user?._id &&
+                  item?.message !== ""
+                ) {
+                  return <MessageSend key={index} mess={item?.message} />;
+                } else if (
+                  item?.userSend?._id !== auth?._id &&
+                  item?.idGroupChat === user?._id &&
+                  item?.message !== ""
+                ) {
+                  return (
+                    <MessageReceive
+                      key={index}
+                      mess={item?.message}
+                      user={item?.userSend}
+                    />
+                  );
+                }
               }
             })}
           </>
         )}
 
-        {chatPrivate?.map((item, index) => {
-          if (
-            item?.userSend?._id === auth?._id &&
-            item?.userReceive?._id === user?._id &&
-            item?.message !== ""
-          ) {
-            return <MessageSend key={index} mess={item?.message} />;
-          } else if (
-            item?.userSend?._id === user?._id &&
-            item?.message !== ""
-          ) {
-            return (
-              <MessageReceive
-                key={index}
-                mess={item?.message}
-                user={item?.userSend}
-              />
-            );
+        {chatRedux?.map((item, index) => {
+          if (!item.idGroupChat) {
+            if (
+              item?.userSend?._id === auth?._id &&
+              item?.userReceive?._id === user?._id &&
+              item?.message !== ""
+            ) {
+              return <MessageSend key={index} mess={item?.message} />;
+            } else if (
+              item?.userSend?._id === user?._id &&
+              item?.message !== ""
+            ) {
+              return (
+                <MessageReceive
+                  key={index}
+                  mess={item?.message}
+                  user={item?.userSend}
+                />
+              );
+            }
+          } else {
+            if (
+              item?.userSend?._id === auth?._id &&
+              item?.idGroupChat === user?._id &&
+              item?.message !== ""
+            ) {
+              return <MessageSend key={index} mess={item?.message} />;
+            } else if (
+              item?.userSend?._id !== auth?._id &&
+              item?.idGroupChat === user?._id &&
+              item?.message !== ""
+            ) {
+              return (
+                <MessageReceive
+                  key={index}
+                  mess={item?.message}
+                  user={item?.userSend}
+                />
+              );
+            }
           }
         })}
       </div>

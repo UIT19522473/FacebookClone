@@ -7,6 +7,11 @@ import { Select } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { closeCreateGroupChat } from "../../features/createGroupChat/createGroupChatSlice";
 import { getUsers } from "../../features/search/searchAsync";
+import { apiCreateChatGroup } from "../../apis/apiChatGroup";
+import { getGroupChat } from "../../features/chatGroup/chatGroupAsync";
+
+import io from "socket.io-client";
+const socket = io(process.env.REACT_APP_URL_SERVER);
 
 const CreateGroupChat = () => {
   const dispatch = useDispatch();
@@ -19,6 +24,7 @@ const CreateGroupChat = () => {
 
   const [toggleImg, setToggle] = useState(false);
 
+  const [nameGroup, setNameGroup] = useState("");
   const [imageURL, setImageURL] = useState("");
   const [imgURLLocal, setImgURLLocal] = useState("");
 
@@ -60,6 +66,43 @@ const CreateGroupChat = () => {
     setSelectedTags(newTags);
   };
 
+  const handleCreateGroupChat = async () => {
+    // const dataCreatGroupChat = {
+    //   name: nameGroup,
+    //   members: selectedTags,
+    //   img: imgURLLocal,
+    //   historyChat: [],
+    // };
+    dispatch(closeCreateGroupChat());
+    await apiCreateChatGroup({
+      content: {
+        name: nameGroup,
+        members: [...selectedTags, auth.data?.user?._id],
+        img: imgURLLocal,
+        historyChat: [],
+      },
+      token: auth?.data?.tokens?.accessToken,
+    });
+    await dispatch(
+      getGroupChat({
+        content: auth?.data?.user?._id,
+        token: auth?.data?.tokens?.accessToken,
+      })
+    );
+    // console.log(dataCreatGroupChat);
+
+    socket.emit("joinRoom", {
+      // idRoom: `chatPrivate_${auth?._id}`,
+      idUser: auth?.data?.user?._id,
+    });
+    socket.emit("createGroupChat", {
+      // idRoom: `chatPrivate_${auth?._id}`,
+      idUser: auth?.data?.user?._id,
+      name: nameGroup,
+      members: selectedTags,
+    });
+  };
+
   return (
     <div className="wrap-create-group-chat rounded-md">
       <div className="create-group-chat-header flex items-center mb-2 p-2">
@@ -72,6 +115,8 @@ const CreateGroupChat = () => {
         <div className="create-group-chat-setname flex items-center gap-2 mb-2">
           <p className="w-[120px]">Đặt tên nhóm:</p>
           <input
+            value={nameGroup}
+            onChange={(e) => setNameGroup(e.target.value)}
             type="text"
             className="text-base font-bold flex-1 bg-transparent outline-none border-b-[1px] border-gray-700"
           />
@@ -164,7 +209,7 @@ const CreateGroupChat = () => {
           Hủy
         </button>
         <button
-          onClick={() => console.log(selectedTags)}
+          onClick={handleCreateGroupChat}
           className="create-group-chat-btnfooter"
         >
           Tạo mới

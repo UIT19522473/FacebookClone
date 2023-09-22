@@ -2,7 +2,7 @@
   padding: 16px 12px;
   color: var(--color-text-primary);
   font-weight: 500;
-  max-height: 850px;
+  max-height: 700px;
   overflow-y: scroll;
   position: fixed;
   z-index: 1;

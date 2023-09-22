@@ -11,6 +11,8 @@ import { signIn } from "../features/auth/authAsync";
 import ModalCustom from "../components/ModalCustom";
 import { openRegisterForm } from "../features/registerForm/registerFormSlice";
 
+import { FcGoogle } from "react-icons/fc";
+
 // import ModalTest from "../components/ModalTest";
 // import { apiSignIn } from "../apis/apiAuth";
 
@@ -81,6 +83,14 @@ const Login = () => {
               />
               <button onClick={handleLogin} className="btn-login">
                 Login
+              </button>
+
+              <button
+                onClick={handleLogin}
+                className="btn-login btn-login--google flex items-center gap-2 justify-center"
+              >
+                <FcGoogle size={32} />
+                <p className="text-3xl">Continue with Google</p>
               </button>
 
               <Link to="#">Forgotten password?</Link>

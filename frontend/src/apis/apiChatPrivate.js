@@ -10,7 +10,7 @@ const apiCreateChatPrivate = async (data) => {
 };
 
 const apiGetChatPrivate = async (data) => {
-  console.log(data);
+  // console.log(data);
   const response = await axios.get(
     `${process.env.REACT_APP_URL_SERVER_API}/get-mess-private`,
     {
