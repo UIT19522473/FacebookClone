@@ -4,6 +4,10 @@ import "../../styles/home/postcard.css";
 import { useSelector, useDispatch } from "react-redux";
 import { apiCommentChild } from "../../apis/apiComment";
 import { getAllPosts } from "../../features/post/postAsync";
+import { io } from "socket.io-client";
+import { apiGetPostById } from "../../apis/apiPost";
+const socket = io(process.env.REACT_APP_URL_SERVER);
+
 
 const CommentChild = (props) => {
   const dispatch = useDispatch();
@@ -11,7 +15,7 @@ const CommentChild = (props) => {
   const [openWrite, setOpenWrite] = useState(false);
   const [cmtChild, setCmtChild] = useState("");
   // const { author, content, replies, cmt } = props;
-  const { parentId, child, postId } = props;
+  const { parentId, child, postId, setPost } = props;
   //   parentId={cmt?._id}
   //   postId={postId}
   //   child={item}
@@ -32,7 +36,12 @@ const CommentChild = (props) => {
       token: inforAuth?.tokens?.accessToken,
     });
 
-    dispatch(getAllPosts({ token: inforAuth?.tokens?.accessToken }));
+    const postCurrent = await apiGetPostById({
+      token: inforAuth?.tokens?.accessToken,
+      id: postId
+    });
+    setPost(postCurrent.data.metadata.post);
+    socket.emit('update-post', ({ id: postId }));
   };
   return (
     <div className="mt-2">

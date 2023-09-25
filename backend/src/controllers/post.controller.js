@@ -19,6 +19,13 @@ class PostController {
       metadata: await PostService.getPostByUserId({ userId: req.user._id }),
     }).send(res);
   };
+
+  getPostById = async (req, res, next) => {
+    new OK({
+      message: "get post success",
+      metadata: await PostService.getPostById({ postId: req.params.id })
+    }).send(res);
+  }
 }
 
 module.exports = new PostController();

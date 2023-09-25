@@ -5,14 +5,16 @@ import { useSelector, useDispatch } from "react-redux";
 import { apiCommentChild } from "../../apis/apiComment";
 import { getAllPosts } from "../../features/post/postAsync";
 import CommentChild from "./CommentChild";
+import { apiGetPostById } from "../../apis/apiPost";
+import { io } from "socket.io-client";
+const socket = io(process.env.REACT_APP_URL_SERVER);
 
 const CommentUser = (props) => {
-  const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth?.data);
   const [openWrite, setOpenWrite] = useState(false);
   const [cmtChild, setCmtChild] = useState("");
   // const { author, content, replies, cmt } = props;
-  const { cmt, postId } = props;
+  const { cmt, postId, setPost } = props;
   const inforAuth = useSelector((state) => state.auth?.data);
 
   //reply comment
@@ -29,8 +31,13 @@ const CommentUser = (props) => {
       content,
       token: inforAuth?.tokens?.accessToken,
     });
+    const postCurrent = await apiGetPostById({
+      token: inforAuth?.tokens?.accessToken,
+      id: postId
+    });
+    setPost(postCurrent.data.metadata.post);
+    socket.emit('update-post', ({ id: postId }));
 
-    dispatch(getAllPosts({ token: inforAuth?.tokens?.accessToken }));
   };
   return (
     <div className="mt-2">
@@ -66,6 +73,7 @@ const CommentUser = (props) => {
                 // author={reply?.author}
                 // content={reply?.content}
                 // replies={[]}
+                setPost={setPost}
                 parentId={cmt?._id}
                 postId={postId}
                 child={item}

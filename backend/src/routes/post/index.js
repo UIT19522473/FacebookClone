@@ -13,4 +13,6 @@ router.post(
 );
 
 router.get("/post", asyncHandler(postController.getPostByUserId));
+router.get("/post/:id", asyncHandler(postController.getPostById));
+
 module.exports = router;

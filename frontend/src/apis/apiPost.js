@@ -38,4 +38,21 @@ const apiGetAllPost = async (data) => {
   );
   return response;
 };
-export { apiSubmitPost, apiGetAllPost };
+
+const apiGetPostById = async (data) => {
+  // console.log("api", data.data.get("image"));
+  const { token, id } = data;
+
+  const response = await axios.get(
+    `${process.env.REACT_APP_URL_SERVER_API}/post/${id}`,
+
+    {
+      withCredentials: true,
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: token,
+      },
+    }
+  );
+  return response;
+}; export { apiSubmitPost, apiGetAllPost, apiGetPostById };

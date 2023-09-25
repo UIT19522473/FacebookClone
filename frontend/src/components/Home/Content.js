@@ -39,7 +39,7 @@ const Content = () => {
     dispatch(getAllPosts({ token: token }));
   }, [token, dispatch]);
 
-  // console.log(posts);
+  console.log(posts);
 
   // const [openTest, setOpenTest] = useState(false);
 

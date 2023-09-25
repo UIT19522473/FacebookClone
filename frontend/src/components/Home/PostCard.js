@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 // import IconFacebook from "../../images/facebook.svg";
 import "../../styles/home/postcard.css";
 import { BsThreeDots, BsEmojiLaughing } from "react-icons/bs";
@@ -20,10 +20,27 @@ import { getAllPosts } from "../../features/post/postAsync";
 
 //change time
 import moment from "moment";
+import { io } from "socket.io-client";
+import { apiGetPostById } from "../../apis/apiPost";
+
+const socket = io(process.env.REACT_APP_URL_SERVER);
+
 
 const PostCard = (props) => {
   const dispatch = useDispatch();
-  const { post } = props;
+  //const { post } = props;
+  const [post, setPost] = useState(props.post);
+  useEffect(() => {
+    if (post) socket.on(`${post._id}`, async () => {
+      const postCurrent = await apiGetPostById({
+        token: inforAuth?.tokens?.accessToken,
+        id: post._id
+      });
+      //console.log('Post current ', postCurrent.data.metadata.post)
+      setPost(postCurrent.data.metadata.post);
+    })
+  }, [])
+
   const auth = useSelector((state) => state.auth?.data?.user);
   const inforAuth = useSelector((state) => state.auth?.data);
 
@@ -66,8 +83,15 @@ const PostCard = (props) => {
         },
         token: inforAuth?.tokens?.accessToken,
       });
-
-      dispatch(getAllPosts({ token: inforAuth?.tokens?.accessToken }));
+      console.log('call 1');
+      socket.emit('call-notify', ({ email: post.userId.email, text: 'đã phản hồi bài viết', name: auth.name, emailSend: auth.email }))
+      socket.emit('update-post', ({ id: post._id }));
+      const postCurrent = await apiGetPostById({
+        token: inforAuth?.tokens?.accessToken,
+        id: post._id
+      });
+      //console.log('Post current ', postCurrent.data.metadata.post)
+      setPost(postCurrent.data.metadata.post);
     }
   };
 
@@ -144,7 +168,7 @@ const PostCard = (props) => {
             {post?.commentsId ? (
               post?.commentsId.map((item, index) => (
                 <li key={index}>
-                  <CommentUser cmt={item} postId={post?._id} />
+                  <CommentUser setPost={setPost} cmt={item} postId={post?._id} />
                 </li>
               ))
             ) : (

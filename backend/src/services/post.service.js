@@ -1,7 +1,7 @@
 const postModel = require("../models/post.model");
 const { BadRequestError } = require("../core/error.response");
-const {findUserById} = require("./user.service");
-const {getInfoData} = require("../utils");
+const { findUserById } = require("./user.service");
+const { getInfoData } = require("../utils");
 class PostService {
     static createPost = async ({ userId, desc, img }) => {
         const newPost = await postModel.create({ userId, desc, img });
@@ -52,6 +52,42 @@ class PostService {
             post: listPost,
         };
     };
+
+    static getPostById = async ({ postId }) => {
+        const post = await postModel
+            .findById(postId)
+            .populate({
+                path: 'userId',
+                model: 'User'
+            })
+            .populate({
+                path: 'commentsId',
+                model: 'Comment',
+                populate: [
+                    {
+                        path: 'userId',
+                        model: 'User'
+                    },
+                    {
+                        path: 'commentsChild',
+                        populate: [
+                            {
+                                path: 'userId',
+                                model: 'User'
+                            },
+                            {
+                                path: 'reply',
+                                model: 'User'
+                            }
+                        ]
+                    }
+                ]
+            });
+
+        return {
+            post,
+        };
+    }
 }
 
 module.exports = PostService;
