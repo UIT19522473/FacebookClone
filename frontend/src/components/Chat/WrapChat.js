@@ -23,14 +23,26 @@ import { addToAllMessGroup } from "../../features/chatGroup/chatGroupSlice";
 // import { apiGetChatGroup } from "../../apis/apiChatGroup";
 // import { getGroupChat } from "../../features/chatGroup/chatGroupAsync";
 
+import {
+  closeInvitedCall,
+  openInvitedCall,
+} from "../../features/invitedCall/invitedCallSlice";
+
+import { useNavigate } from "react-router-dom";
+
 import io from "socket.io-client";
 const socket = io(process.env.REACT_APP_URL_SERVER);
 
 const WrapChat = () => {
+  const navigate = useNavigate();
+
   const auth = useSelector((state) => state.auth?.data?.user);
   const dispatch = useDispatch();
   const listChat = useSelector((state) => state.listChat);
   const openModal = useSelector((state) => state.groupChat.open);
+  const openModalInvitedCall = useSelector((state) => state.invitedCall.open);
+
+  // const [openModalCall, setOpenModalCall] = useState(true);
 
   const handleDiplayMess = (user, e) => {
     e.preventDefault();
@@ -55,21 +67,23 @@ const WrapChat = () => {
   const [show, setShow] = useState(false);
   const [userSend, setUserSend] = useState("");
   const [userReceive, setUserReceive] = useState("");
+  const [meetingId, setMeetingId] = useState("");
+  const [idRoom, setIdRoom] = useState("");
+  const [accept, setAccept] = useState("");
+
   const [call_id, setCall_id] = useState("");
 
   const Accept = () => {
-    socket.emit('callVideo', {})
-  }
+    socket.emit("callVideo", {});
+  };
 
-  const Reject = () => {
-
-  }
+  const Reject = () => {};
 
   //End Phuc code
 
   //chat socket
   useEffect(() => {
-    //Start Phuc code 
+    //Start Phuc code
 
     socket.emit("joinRoom", {
       // idRoom: `chatPrivate_${auth?._id}`,
@@ -85,29 +99,17 @@ const WrapChat = () => {
         setShow(true);
       }
       //End Phuc code
-
-
-    })
+    });
 
     socket.on(`messageReceived`, (data) => {
       const { userSend, userReceive, message } = data;
+      console.log("ngu ne`", message);
 
       dispatch(
         addToAllMess({
           message: message,
           userSend: userSend,
           userReceive: userReceive,
-        })
-      );
-    });
-
-    socket.on(`messageGroupReceived`, (data) => {
-      const { userSend, idGroupChat, message } = data;
-      dispatch(
-        addToAllMessGroup({
-          message: message,
-          userSend: userSend,
-          idGroupChat: idGroupChat,
         })
       );
     });
@@ -120,8 +122,65 @@ const WrapChat = () => {
     // });
   }, [auth?._id, dispatch]);
 
+  //call
+  useEffect(() => {
+    socket.emit("joinRoom", {
+      // idRoom: `chatPrivate_${auth?._id}`,
+      idUser: auth?._id,
+    });
+
+    //call
+    socket.on(`inviteCallReceived`, (data) => {
+      const { userSend, userReceive, meetingId, type } = data;
+      if (type === "INVITE") {
+        dispatch(openInvitedCall());
+      }
+
+      setUserSend(userSend);
+      setUserReceive(userReceive);
+      setMeetingId(meetingId);
+    });
+  }, [auth?._id, dispatch]);
+
+  const handleAcceptCall = () => {
+    socket.emit(`acceptCall`, {
+      userSend: userReceive,
+      userReceive: userSend,
+      meetingId: meetingId,
+      idRoom: `call_${userSend._id}`,
+      accept: true,
+    });
+
+    navigate(
+      `/test-call/${userSend?._id}/call-private?idRoom=${meetingId}&accept=true`
+    );
+
+    dispatch(closeInvitedCall());
+  };
+
   return (
     <div className="chat-container">
+      {openModalInvitedCall && (
+        <ModalCustom type="INVITECALL" open={openModalInvitedCall}>
+          <div className="w-full h-[300px] bg-black">
+            <p className="text-white">calling</p>
+            <div className="flex gap-4">
+              <button
+                onClick={handleAcceptCall}
+                className="text-white p-4 rounded-xl bg-orange-700"
+              >
+                Đồng ý
+              </button>
+              <button className="text-white p-4 rounded-xl bg-orange-700">
+                Từ chối
+              </button>
+            </div>
+          </div>
+        </ModalCustom>
+      )}
+      <ModalCustom>
+        <p className="text-white">Test calling</p>
+      </ModalCustom>
       <div className="row-chat">
         {listChat.display?.map((item, index) => (
           <ChatBox user={item} key={index} />
@@ -165,11 +224,12 @@ const WrapChat = () => {
           </div>
         ))}
       </div>
-      {show ?
-        (<div>
+      {show ? (
+        <div>
           <button onClick={Accept}>Accept</button>
           <button onClick={Reject}>Reject</button>
-        </div>) : null}
+        </div>
+      ) : null}
     </div>
   );
 };

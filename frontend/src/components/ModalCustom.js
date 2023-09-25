@@ -1,8 +1,4 @@
 import * as React from "react";
-// import Box from "@mui/material/Box";
-// import Button from "@mui/material/Button";
-// import Typography from "@mui/material/Typography";
-// import Modal from "@mui/material/Modal";
 import { Modal } from "antd";
 // import CreatePost from "./Home/CreatePost";
 import { useDispatch } from "react-redux";
@@ -14,6 +10,7 @@ import {
   closeCreateGroupChat,
   closeGroupChatMembers,
 } from "../features/createGroupChat/createGroupChatSlice";
+import { closeInvitedCall } from "../features/invitedCall/invitedCallSlice";
 
 // const style = {
 //   position: "absolute",
@@ -40,6 +37,8 @@ export default function ModalCustom(props) {
       dispatch(closeCreateGroupChat());
     } else if (type === "OPENMEMBERSCHAT") {
       dispatch(closeGroupChatMembers());
+    } else if (type === "INVITECALL") {
+      dispatch(closeInvitedCall());
     }
   };
 

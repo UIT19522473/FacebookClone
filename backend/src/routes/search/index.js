@@ -8,4 +8,5 @@ const { authentication } = require("../../middlewares/authentication");
 router.use(authentication);
 
 router.get("/search", asyncHandler(searchController.getUsers));
+router.get("/get-user-called", asyncHandler(searchController.getUserCalled));
 module.exports = router;

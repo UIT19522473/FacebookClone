@@ -1,4 +1,5 @@
 const { CREATED, OK } = require("../core/success.response");
+const groupChatModel = require("../models/groupChat.model");
 const userModel = require("../models/user.model");
 const PostService = require("../services/post.service");
 
@@ -20,6 +21,24 @@ class SearchController {
       metadata: await userModel.find(dynamicQuery),
       //   metadata: await userModel.find({ _id: "64f09ef1ba02976f5151cb32" }),
     }).send(res);
+  };
+
+  getUserCalled = async (req, res) => {
+    const { idUser, typeCall } = req.query;
+    if (typeCall === "private") {
+      const response = await userModel
+        .findById(idUser)
+        .select(["_id", "name", "img"]);
+      return res.status(200).json({ metadata: response });
+    }
+
+    return res
+      .status(200)
+      .json({
+        metadata: await groupChatModel
+          .findById(idUser)
+          .select(["_id", "name", "img"]),
+      });
   };
 }
 

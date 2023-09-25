@@ -9,6 +9,9 @@ import { AiFillLike } from "react-icons/ai";
 import MessageReceive from "./MessageReceive";
 import MessageSend from "./MessageSend";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { authToken, createMeeting } from "../../apis/apiCall";
+
 import {
   addHidden,
   removeDisplay,
@@ -47,6 +50,7 @@ const socket = io(process.env.REACT_APP_URL_SERVER);
 //   return data;
 // };
 const ChatBox = (props) => {
+  const navigate = useNavigate();
   const auth = useSelector((state) => state.auth?.data?.user);
   const dispatch = useDispatch();
   const openModal = useSelector((state) => state.groupChat.openMembers.open);
@@ -71,8 +75,8 @@ const ChatBox = (props) => {
   const idCommon = user.members
     ? "idGroupTest"
     : user?._id.localeCompare(auth?._id) < 0
-      ? `${user?._id}_${auth?._id}`
-      : `${auth?._id}_${user?._id}`;
+    ? `${user?._id}_${auth?._id}`
+    : `${auth?._id}_${user?._id}`;
 
   const [isLoading, setIsLoading] = useState(true);
   const [historyChat, setHistoryChat] = useState([]);
@@ -204,8 +208,36 @@ const ChatBox = (props) => {
     }
   };
   const test = () => {
-    console.log('test');
-  }
+    console.log("test");
+  };
+
+  const handleCall = async () => {
+    const meetingId = await createMeeting({ token: authToken });
+    // console.log("testttt", meetingId);
+    if (!user.members) {
+      const dataUserReceive = {
+        _id: user?._id,
+        name: user?.name,
+        img: user?.img,
+        email: user?.email,
+      };
+
+      socket.emit("inviteCall", {
+        userSend: auth,
+        userReceive: dataUserReceive,
+        meetingId: meetingId,
+        idRoom: `call_${user?._id}`,
+        type: "INVITE",
+      });
+    }
+
+    navigate(
+      `/test-call/${user?._id}/${
+        user?.members ? "call-group" : "call-private"
+      }?idRoom=${meetingId}&accept=pending`
+    );
+  };
+
   const dataGroupDropDown = [
     {
       label: (
@@ -327,7 +359,7 @@ const ChatBox = (props) => {
           </div>
         </span>
         <span className="chat-box-controller flex items-center gap-2">
-          <button className="chat-box-btn-controller" onClick={test}>
+          <button className="chat-box-btn-controller" onClick={handleCall}>
             <MdCall size={22} />
           </button>
           <button className="chat-box-btn-controller">
