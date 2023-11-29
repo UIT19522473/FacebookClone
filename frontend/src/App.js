@@ -45,33 +45,30 @@ const App = () => {
     });
   }, []);
   return (
-    <>
       <BrowserRouter>
         <Routes>
           {/* <Route path="login" element={<Login />} /> */}
           {/* <Route path="test" element={<ModalRegister />} /> */}
 
-          {auth ? (
-            <Route path="/" element={<LayOut />}>
-              <Route index element={<Home />} />
-              <Route path="watch" element={<Watch />} />
-              <Route path="group" element={<Group />} />
-              <Route path="game" element={<Game />} />
-              <Route path="profile" element={<Profile />} />
-              <Route path="test" element={<Test />} />
-              <Route path="test-call" element={<TestCall />} />
-              <Route path="*" element={<NotFound />} />
 
-            </Route>
-          ) : (
-            <Route path="/">
-              <Route index element={<Login />} />
-            </Route>
-          )}
-        </Routes>
-      </BrowserRouter>
-      <ToastContainer />
-    </>
+        {auth ? (
+          <Route path="/" element={<LayOut />}>
+            <Route index element={<Home />} />
+            <Route path="watch" element={<Watch />} />
+            <Route path="group" element={<Group />} />
+            <Route path="game" element={<Game />} />
+            <Route path="profile" element={<Profile />} />
+            <Route path="test" element={<Test />} />
+            <Route path="test-call/:idUser/:typeCall" element={<TestCall />} />
+            <Route path="*" element={<NotFound />} />
+          </Route>
+        ) : (
+          <Route path="/">
+            <Route index element={<Login />} />
+          </Route>
+        )}
+      </Routes>
+    </BrowserRouter>
   );
 };
 

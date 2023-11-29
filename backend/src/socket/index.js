@@ -1,5 +1,6 @@
 const chatMessageHandler = require("./Chat");
 const roomHandler = require("./Room");
+const callHandler = require("./Call");
 
 const socketServer = (server) => {
   const socketIo = require("socket.io")(server, {
@@ -16,6 +17,9 @@ const socketServer = (server) => {
 
     chatMessageHandler.chatPrivate(socket, socketIo);
     chatMessageHandler.chatGroup(socket, socketIo);
+    callHandler.inviteCall(socket, socketIo);
+    callHandler.acceptCall(socket, socketIo);
+
     chatMessageHandler.notifyCreateGroupChat(socket, socketIo);
 
     //handle notify

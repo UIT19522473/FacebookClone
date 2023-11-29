@@ -7,7 +7,7 @@ const chatPrivate = (socket, socketIo) => {
 
   socket.on("chatMessage", (data) => {
     const { userSend, userReceive, message, idRoom } = data;
-    // console.log("one more time");
+    console.log("chatMessage", userSend?.name);
 
     socketIo.to(idRoom).emit(`messageReceived`, {
       userSend: userSend,
