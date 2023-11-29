@@ -18,6 +18,21 @@ const socketServer = (server) => {
     chatMessageHandler.chatGroup(socket, socketIo);
     chatMessageHandler.notifyCreateGroupChat(socket, socketIo);
 
+    //handle notify
+
+    socket.on('call-notify', (data) => {
+      const { email, text, name, emailSend } = data;
+      console.log('text ', text)
+      console.log('emai ', email)
+      socketIo.emit(email, ({ text, name, emailSend }));
+
+    })
+
+    socket.on('update-post', (data) => {
+      const { id } = data;
+      socketIo.emit(id);
+    })
+
     //sub socket ends here....
     socket.on("disconnect", () => {
       console.log("User disconnected:", socket.id);
